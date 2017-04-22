@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\container;
+namespace litepubl\core\instances;
 
 class DI
 {
@@ -33,7 +33,6 @@ class DI
             case static::CLASS_NAME:
                     $result[] = call_user_func_array($createClass, [$value]);
                 break;
-
             case static::CALLBACK:
                     $result[] = call_user_func_array($value, [$this]);
                 break;

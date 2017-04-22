@@ -1,5 +1,5 @@
 {
-    "name": "litepubl/logmanager",
+    "name": "litepubl/instances",
     "type": "litepubl-core",
     "version": "7.08.0",
     "description": "Fast powerfull CMS",
@@ -25,13 +25,11 @@
     },
     "require": {
         "php": ">=7.00.0",
-        "psr/log": "^1.0",
         "psr/container": "^1.0",
-        "monolog/monolog": "^1.19",
     },
     "autoload": {
         "psr-4": {
-            "litepubl\\core\\logmanager\\": "src/"
+            "litepubl\\core\\instances\\": "src/"
         }
     }
 }
