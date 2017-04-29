@@ -2,7 +2,9 @@
 
 namespace litepubl\core\instances;
 
-class DI
+use Psr\Container\ContainerInterface;
+
+class DI implements DIInterface, ContainerInterface
 {
     const TYPE = 'type';
     const VALUE = 'value';
@@ -11,18 +13,31 @@ class DI
 
     protected $constructors;
 
-    public function createInstance(string $className, callable $createClass)
+    public function __construct()
     {
-        $args = $this->getArgs($className, $createClass);
-        if (!count($args)) {
-            return new $className();
-        }
-
-                $reflectedClass = new \ReflectionClass($className);
-        return $reflectedClass->newInstanceArgs($constructorArgs);
     }
 
-    public function getArgs(string $className, callable $createClass): array
+    public function get($className)
+    {
+        return $this->createInstance($className, $this);
+    }
+    public function has($className)
+    {
+        return class_exists($className);
+    }
+
+    public function createInstance(string $className, ContainerInterface $container)
+    {
+        $args = $this->getArgs($className, $container);
+        if (count($args)) {
+                $reflectedClass = new \ReflectionClass($className);
+            return $reflectedClass->newInstanceArgs($args);
+        } else {
+            return new $className();
+        }
+    }
+
+    public function getArgs(string $className, ContainerInterface $container): array
     {
         $args = $this->getConstructArgs($className);
             $result = [];
@@ -31,10 +46,11 @@ class DI
 
             switch ($arg[static::TYPE]) {
             case static::CLASS_NAME:
-                    $result[] = call_user_func_array($createClass, [$value]);
+                    $result[] = $container->get($value);
                 break;
+
             case static::CALLBACK:
-                    $result[] = call_user_func_array($value, [$this]);
+                    $result[] = call_user_func_array($value, [$className, $container]);
                 break;
 
             case static::VALUE:
@@ -42,7 +58,7 @@ class DI
                 break;
 
             default:
-                throw new \Exception();
+                throw new NotFound(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', $arg[static::TYPE], $arg[static::NAME], $className));
             }
         }
 

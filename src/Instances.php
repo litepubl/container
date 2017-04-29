@@ -11,7 +11,7 @@ class Instances implements ContainerInterface
     protected $items;
     protected $circleNames;
 
-    public function __construct(DI $DI, $eventManager, string $fallbackFactory = NullFactory::class)
+    public function __construct(DIInterface $DI, $eventManager, string $fallbackFactory = NullFactory::class)
     {
         $this->DI = $DI;
         $this->eventManager = $eventManager;
