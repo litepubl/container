@@ -5,23 +5,25 @@ use Psr\Container\ContainerInterface;
 
 class Instances implements ContainerInterface
 {
+    protected $factory;
     protected $DI;
     protected $eventManager;
-    protected $fallbackFactory;
     protected $items;
     protected $circleNames;
 
-    public function __construct(DIInterface $DI, $eventManager, string $fallbackFactory = NullFactory::class)
+    public function __construct(ContainerInterface $factory, DIInterface $DI, $eventManager)
     {
+        $this->factory = $factory;
         $this->DI = $DI;
         $this->eventManager = $eventManager;
-        $this->fallbackFactory = $fallbackFactory;
         $this->circleNames = [];
         $this->items = [
+        get_class($factory) => $factory,
+        'factory' => $factory,
             get_class($DI) => $DI,
+            'di' => $DI,
             get_class($this) => $this,
         ContainerInterface::class => $this,
-            'di' => $DI,
             'container' => $this,
         'instances' => $this,
             'services' => $this,
@@ -72,18 +74,11 @@ class Instances implements ContainerInterface
     {
         if (interface_exists($className)) {
             $result = $this->get($this->getImplementation($className));
+        } elseif ($this->factory->has($className)) {
+            $factory = $this->get($this->factory->get($className));
+            $result = $factory->get($className);
         } else {
-            $factory = $this->getFactory($className);
-            if ($factory->has($className)) {
-                $result = $factory->get($className);
-            } else {
-                $result = $this->DI->createInstance(
-                    $className, [
-                    $this,
-                    'get'
-                    ]
-                );
-            }
+            $result = $this->DI->createInstance($className, $this);
         }
         
         return $result;
@@ -107,29 +102,5 @@ class Instances implements ContainerInterface
         }
         
         return $result;
-    }
-
-    public function getFactoryClass(string $className): string
-    {
-        if (isset($this->factories[$className])) {
-            $result = $this->factories[$className];
-        } else {
-            $ns = substr($className, 0, strrpos($className, '\\'));
-            $factoryClass = $ns . '\Factory';
-            if (($className == $factoryClass) {
-                $result = NullFactory::class;
-            } elseif (class_exists($factoryClass)) {
-                $result = $factoryClass;
-            } else {
-                $result = $this->fallbackFactory;
-            }
-        }
-        
-        return $result;
-    }
-
-    public function getFactory(string $className): ContainerInterface
-    {
-        return $this->get($this->getFactoryClass($className));
     }
 }
