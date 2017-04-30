@@ -7,19 +7,23 @@ class Instances implements ContainerInterface
 {
     protected $factory;
     protected $DI;
+    protected $remap;
     protected $eventManager;
     protected $items;
     protected $circleNames;
 
-    public function __construct(ContainerInterface $factory, DIInterface $DI, $eventManager)
+    public function __construct(ContainerInterface $factory, ContainerInterface $remap, DIInterface $DI, $eventManager)
     {
         $this->factory = $factory;
+        $this->remap = $remap;
         $this->DI = $DI;
         $this->eventManager = $eventManager;
         $this->circleNames = [];
         $this->items = [
         get_class($factory) => $factory,
         'factory' => $factory,
+        get_class($remap) => $remap,
+        'remap' => $remap,
             get_class($DI) => $DI,
             'di' => $DI,
             get_class($this) => $this,
@@ -72,33 +76,13 @@ class Instances implements ContainerInterface
 
     public function createInstance(string $className)
     {
-        if (interface_exists($className)) {
-            $result = $this->get($this->getImplementation($className));
+        if ($this->remap->has($className)) {
+            $result = $this->get($this->remap->get($className));
         } elseif ($this->factory->has($className)) {
             $factory = $this->get($this->factory->get($className));
             $result = $factory->get($className);
         } else {
             $result = $this->DI->createInstance($className, $this);
-        }
-        
-        return $result;
-    }
-
-    public function getImplementation(string $interfaceName): string
-    {
-        if (isset($this->implementations[$interfaceName])) {
-            $result = $this->implementations[$interfaceName];
-        } else {
-            $a = $this->eventManager->call(
-                static::ONINTERFACE, [
-                'interfaceName' => $interfaceName,
-                'result' => null
-                ]
-            );
-            $result = $a['result'];
-            if (!$result) {
-                throw new NotFound(sprintf('Interface implementation of "%s" not found', $interfaceName));
-            }
         }
         
         return $result;

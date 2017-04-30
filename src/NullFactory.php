@@ -4,7 +4,7 @@ namespace litepubl\core\instances;
 
 use Psr\Container\ContainerInterface;
 
-class NullFactory implements FactoryInterface
+class NullFactory implements ContainerInterface
 {
     public function get($className)
     {
@@ -15,8 +15,4 @@ class NullFactory implements FactoryInterface
     {
         return false;
     }
-
-    public function set(string $className, string $factoryClass)
-{
-}
 }

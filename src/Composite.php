@@ -34,4 +34,21 @@ class Composite implements ContainerInterface
 
         return false;
     }
+
+    public function add(ContainerInterface $item)
+    {
+        $this->items[] = $item;
+    }
+
+    public function remove(ContainerInterface $container): bool
+    {
+        foreach ($this->items as $i => $item) {
+            if ($item == $container) {
+                unset($this->items[$i]);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

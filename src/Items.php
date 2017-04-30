@@ -1,14 +1,15 @@
 <?php
 namespace litepubl\core\instances;
 
-class Factory implements FactoryInterface
+use Psr\Container\ContainerInterface;
+
+class Items implements ContainerInterface
 {
     protected $items;
 
-    public function __construct(array $items, $eventManager)
+    public function __construct(array $items)
     {
         $this->items = $items;
-        $this->eventManager = $eventManager;
     }
 
     public function get($className)
