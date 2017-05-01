@@ -8,7 +8,7 @@ class Composite implements ContainerInterface
 {
     protected $items;
 
-    public function __construct(array $items)
+    public function __construct(ContainerInterface ...$items)
     {
         $this->items = $items;
     }
