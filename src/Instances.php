@@ -20,17 +20,17 @@ class Instances implements ContainerInterface
         $this->eventManager = $eventManager;
         $this->circleNames = [];
         $this->items = [
-        get_class($factory) => $factory,
-        'factory' => $factory,
-        get_class($remap) => $remap,
-        'remap' => $remap,
+            get_class($factory) => $factory,
+            'factory' => $factory,
+            get_class($remap) => $remap,
+            'remap' => $remap,
             get_class($DI) => $DI,
             'di' => $DI,
             get_class($this) => $this,
-        ContainerInterface::class => $this,
+            ContainerInterface::class => $this,
             'container' => $this,
-        'instances' => $this,
-            'services' => $this,
+            'instances' => $this,
+            'services' => $this
         ];
     }
 
