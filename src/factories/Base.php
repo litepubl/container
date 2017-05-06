@@ -1,5 +1,7 @@
 <?php
-namespace litepubl\core\instances;
+namespace litepubl\core\instances\factories;
+
+use Psr\Container\ContainerInterface;
 
 class BaseFactory implements FactoryInterface
 {

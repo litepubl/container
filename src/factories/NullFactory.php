@@ -1,14 +1,14 @@
 <?php
 
-namespace litepubl\core\instances;
+namespace litepubl\core\instances\factories;
 
-use Psr\Container\ContainerInterface;
+use litepubl\core\instances\NotFound;
 
-class NullFactory implements ContainerInterface
+class NullFactory implements FactoryInterface
 {
     public function get($className)
     {
-            throw new NotFound(sprintf('Class "%s" not found', $className));
+            throw new NotFound($className);
     }
 
     public function has($className)

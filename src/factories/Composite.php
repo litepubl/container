@@ -1,8 +1,8 @@
 <?php
 
-namespace litepubl\core\instances;
+namespace litepubl\core\instances\factories;
 
-class Factories extends Composite implements FactoryInterface
+class Composite extends ContainerComposite implements FactoryInterface
 {
 
     public function __construct(FactoryInterface ...$items)

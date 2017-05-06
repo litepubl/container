@@ -1,9 +1,9 @@
 <?php
-namespace litepubl\core\instances;
+namespace litepubl\core\instances\factories;
 
 use Psr\Container\ContainerInterface;
 
-class NameSpaceFactory implements ContainerInterface
+class NameSpaceFactory implements FactoryInterface
 {
 
     public function __construct()

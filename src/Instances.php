@@ -1,28 +1,25 @@
 <?php
 namespace litepubl\core\instances;
 
+use litepubl\core\instances\factories\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 class Instances implements InstancesInterface
 {
     protected $factory;
-    protected $DI;
     protected $eventManager;
     protected $items;
     protected $circleNames;
 
-    public function __construct(FactoryInterface $factory, DIInterface $DI, EventsInterface $eventManager)
+    public function __construct(FactoryInterface $factory, EventsInterface $eventManager)
     {
         $this->factory = $factory;
-        $this->DI = $DI;
         $this->eventManager = $eventManager;
         $this->circleNames = [];
         $this->items = [
         'factory' => $factory,
         get_class($factory) => $factory,
-            get_class($DI) => $DI,
-            'di' => $DI,
-            get_class($this) => $this,
+         get_class($this) => $this,
             ContainerInterface::class => $this,
             'container' => $this,
             'instances' => $this,
@@ -78,7 +75,7 @@ class Instances implements InstancesInterface
         } elseif ($this->factory->has($className)) {
             $result = $this->factory->get($className);
         } else {
-            $result = $this->DI->createInstance($className, $this);
+                throw new NotFound($className);
         }
         
         return $result;
