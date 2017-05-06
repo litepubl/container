@@ -15,4 +15,9 @@ class NullFactory implements ContainerInterface
     {
         return false;
     }
+
+    public function getImplementation(string $className): string
+    {
+        return '';
+    }
 }

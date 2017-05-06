@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 class Composite implements ContainerInterface
 {
     protected $items;
+    protected $current;
 
     public function __construct(ContainerInterface ...$items)
     {
@@ -15,8 +16,13 @@ class Composite implements ContainerInterface
 
     public function get($className)
     {
-        foreach ($this->items as $container) {
+        if ($this->current && isset($this->items[$this->current]) && ($this->items[$this->current]->has($className)) {
+                return $this->items[$this->current];
+        }
+
+        foreach ($this->items as $i => $container) {
             if ($container->has($className)) {
+                $this->current = $i;
                 return $container->get($className);
             }
         }
@@ -26,8 +32,13 @@ class Composite implements ContainerInterface
 
     public function has($className)
     {
-        foreach ($this->items as $container) {
+        if ($this->current && isset($this->items[$this->current]) && ($this->items[$this->current]->has($className)) {
+                return true;
+        }
+
+        foreach ($this->items as $i => $container) {
             if ($container->has($className)) {
+                $this->current = $i;
                 return true;
             }
         }

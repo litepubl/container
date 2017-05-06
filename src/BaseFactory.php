@@ -1,9 +1,7 @@
 <?php
 namespace litepubl\core\instances;
 
-use Psr\Container\ContainerInterface;
-
-class BaseFactory implements ContainerInterface
+class BaseFactory implements FactoryInterface
 {
     protected $container;
     protected $classMap;
@@ -19,17 +17,33 @@ class BaseFactory implements ContainerInterface
         return [];
     }
 
+    public function getImplementation(string $className): string
+    {
+        return '';
+    }
+
     public function get($className)
     {
         $className = ltrim($className, '\\');
         if (isset($this->classMap[$className])) {
             $method = $this->classMap[$className];
+            if ($method && method_exists($this, $method)) {
+                        return $this->$method();
+            }
+
+            $name = substr($className, strrpos($className, '\\') + 1);
+            $method = 'create' . $name;
+            if (method_exists($this, $method)) {
+                        return $this->$method();
+            }
+
+            $method = 'get' . $name;
             if (method_exists($this, $method)) {
                         return $this->$method();
             }
         }
         
-        throw new NotFound($classname);
+        throw new NotFound($className);
     }
 
     public function has($className)
@@ -37,8 +51,8 @@ class BaseFactory implements ContainerInterface
         return isset($this->classMap[ltrim($className, '\\')]);
     }
 
-    public function set(string $className, string $factoryClass)
+    public function set(string $className, string $method)
     {
-        $this->classMap[$className] = $factoryClass;
+        $this->classMap[$className] = $method;
     }
 }

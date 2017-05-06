@@ -22,4 +22,9 @@ class NameSpaceFactory implements ContainerInterface
         $factoryClass = $this->get($className);
         return ($className != $factoryClass) && class_exists($factoryClass);
     }
+
+    public function getImplementation(string $className): string
+    {
+        return '';
+    }
 }

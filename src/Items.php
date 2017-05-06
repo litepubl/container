@@ -19,7 +19,7 @@ class Items implements ContainerInterface
             return $this->items[$className];
         }
         
-        throw new NotFound(sprintf('Class %%s not found', $className));
+        throw new NotFound($clasName);
     }
 
     public function has($className)
