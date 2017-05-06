@@ -2,6 +2,8 @@
 
 namespace litepubl\core\instances\factories;
 
+use litepubl\core\instances\container\Composite as ContainerComposite;
+
 class Composite extends ContainerComposite implements FactoryInterface
 {
 

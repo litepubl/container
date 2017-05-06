@@ -1,7 +1,8 @@
 <?php
-namespace litepubl\core\instances;
+namespace litepubl\core\instances\container;
 
 use Psr\Container\ContainerInterface;
+use litepubl\core\instances\NotFound;
 
 class Items implements ContainerInterface
 {
@@ -19,7 +20,7 @@ class Items implements ContainerInterface
             return $this->items[$className];
         }
         
-        throw new NotFound($clasName);
+        throw new NotFound($className);
     }
 
     public function has($className)

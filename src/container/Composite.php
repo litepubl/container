@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\instances;
+namespace litepubl\core\instances\container;
 
 use Psr\Container\ContainerInterface;
 

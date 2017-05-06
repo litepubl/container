@@ -20,6 +20,7 @@ class Proxy
     {
         if (!$this->instance) {
                 $this->instance = $this->container->get($this->name);
+            $this->container = null;
         }
 
         return $this->instance;
