@@ -4,7 +4,7 @@ namespace litepubl\core\container;
 use litepubl\core\container\factories\FactoryInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
-class Instances implements ContainerInterface
+class Container implements ContainerInterface
 {
     protected $factory;
     protected $eventManager;

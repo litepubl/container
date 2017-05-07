@@ -3,20 +3,17 @@ namespace litepubl\core\container\factories;
 
 use Psr\Container\ContainerInterface;
 
-class Base implements FactoryInterface
+abstract class Base implements FactoryInterface
 {
     protected $container;
     protected $classMap;
+
+    abstract protected function getClassMap(): array;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->classMap = $this->getClassMap();
-    }
-
-    protected function getClassMap(): array
-    {
-        return [];
     }
 
     public function getImplementation(string $className): string
