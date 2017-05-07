@@ -16,7 +16,7 @@ class NameSpaceFactory implements FactoryInterface
     {
         $className = ltrim($className, '\\');
             $ns = substr($className, 0, strrpos($className, '\\'));
-        return $ns . '\Factory');
+        return $ns . '\Factory';
     }
 
     public function get($className)

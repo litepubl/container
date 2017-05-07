@@ -16,7 +16,7 @@ class Composite implements ContainerInterface
 
     public function get($className)
     {
-        if ($this->current && isset($this->items[$this->current]) && ($this->items[$this->current]->has($className)) {
+        if (($this->current !== null) && isset($this->items[$this->current]) && $this->items[$this->current]->has($className)) {
                 return $this->items[$this->current];
         }
 
@@ -32,7 +32,7 @@ class Composite implements ContainerInterface
 
     public function has($className)
     {
-        if ($this->current && isset($this->items[$this->current]) && ($this->items[$this->current]->has($className)) {
+        if (($this->current !== null) && isset($this->items[$this->current]) && $this->items[$this->current]->has($className)) {
                 return true;
         }
 
@@ -46,16 +46,25 @@ class Composite implements ContainerInterface
         return false;
     }
 
-    public function add(ContainerInterface $item)
+    public function add(ContainerInterface $item):ContainerInterface
     {
         $this->items[] = $item;
+        return $item;
+    }
+
+    public function addFirst(ContainerInterface $item): ContainerInterface
+    {
+        array_unshift($this->items, $item);
+        $this->current = null;
+        return $item;
     }
 
     public function remove(ContainerInterface $container): bool
     {
         foreach ($this->items as $i => $item) {
             if ($item == $container) {
-                unset($this->items[$i]);
+                array_splice($this->items, $i, 1);
+                $this->current = null;
                 return true;
             }
         }
