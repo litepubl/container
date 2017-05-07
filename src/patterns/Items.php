@@ -1,8 +1,8 @@
 <?php
-namespace litepubl\core\instances\container;
+namespace litepubl\core\container\patterns;
 
 use Psr\Container\ContainerInterface;
-use litepubl\core\instances\NotFound;
+use litepubl\core\container\NotFound;
 
 class Items implements ContainerInterface
 {

@@ -1,10 +1,10 @@
 <?php
-namespace litepubl\core\instances;
+namespace litepubl\core\container;
 
-use litepubl\core\instances\factories\FactoryInterface;
-use Psr\Container\ContainerInterface;
+use litepubl\core\container\factories\FactoryInterface;
+use Psr\Container\ContainerInterface as PsrContainerInterface;
 
-class Instances implements InstancesInterface
+class Instances implements ContainerInterface
 {
     protected $factory;
     protected $eventManager;
@@ -21,6 +21,7 @@ class Instances implements InstancesInterface
         get_class($factory) => $factory,
          get_class($this) => $this,
             ContainerInterface::class => $this,
+            PsrContainerInterface::class => $this,
             'container' => $this,
             'instances' => $this,
             'services' => $this,

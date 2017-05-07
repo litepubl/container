@@ -1,9 +1,9 @@
 <?php
-namespace litepubl\core\instances\factories;
+namespace litepubl\core\container\factories;
 
 use Psr\Container\ContainerInterface;
 
-class BaseFactory implements FactoryInterface
+class Base implements FactoryInterface
 {
     protected $container;
     protected $classMap;

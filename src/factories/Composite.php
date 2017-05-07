@@ -1,10 +1,10 @@
 <?php
 
-namespace litepubl\core\instances\factories;
+namespace litepubl\core\container\factories;
 
-use litepubl\core\instances\container\Composite as ContainerComposite;
+use litepubl\core\container\patterns\Composite as PatternComposite;
 
-class Composite extends ContainerComposite implements FactoryInterface
+class Composite extends PatternComposite implements FactoryInterface
 {
 
     public function __construct(FactoryInterface ...$items)

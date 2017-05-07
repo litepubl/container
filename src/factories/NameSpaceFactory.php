@@ -1,25 +1,34 @@
 <?php
-namespace litepubl\core\instances\factories;
+namespace litepubl\core\container\factories;
 
 use Psr\Container\ContainerInterface;
 
 class NameSpaceFactory implements FactoryInterface
 {
+    protected $container;
 
-    public function __construct()
+    public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
+    }
+
+    protected function getFactoryClass($className): string
+    {
+        $className = ltrim($className, '\\');
+            $ns = substr($className, 0, strrpos($className, '\\'));
+        return $ns . '\Factory');
     }
 
     public function get($className)
     {
-        $className = ltrim($className, '\\');
-            $ns = substr($className, 0, strrpos($className, '\\'));
-        return $ns . '\Factory';
+        $factoryClass = $this->getFactoryClass($classname);
+        $factory = $this->container->get($factoryClass);
+        return $factory->get($classname);
     }
 
     public function has($className)
     {
-        $factoryClass = $this->get($className);
+        $factoryClass = $this->getFactoryClass($className);
         return ($className != $factoryClass) && class_exists($factoryClass);
     }
 

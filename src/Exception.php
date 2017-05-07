@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\instances;
+namespace litepubl\core\container;
 
 use Psr\Container\ContainerExceptionInterface;
 

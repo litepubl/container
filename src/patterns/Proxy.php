@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\instances;
+namespace litepubl\core\container\patterns;
 
 use Psr\Container\ContainerInterface;
 
@@ -29,5 +29,15 @@ class Proxy
     public function __call(string $method, array $args)
     {
         return call_user_func_array([$this->getInstance(), $method], $args);
+    }
+
+    public function __get(string $name)
+    {
+        return $this->getInstance()->$name;
+    }
+
+    public function __set(string $name, $value)
+    {
+        $this->getInstance()->$name = $value;
     }
 }

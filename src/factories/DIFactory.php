@@ -1,10 +1,10 @@
 <?php
-namespace litepubl\core\instances\factories;
+namespace litepubl\core\container\factories;
 
-use litepubl\core\instances\DI\DIInterface;
+use litepubl\core\container\DI\DIInterface;
 use Psr\Container\ContainerInterface;
 
-class DI implements FactoryInterface
+class DIFactory implements FactoryInterface
 {
     protected $DI;
     protected $container;
