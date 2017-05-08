@@ -46,17 +46,15 @@ class Composite implements ContainerInterface
         return false;
     }
 
-    public function add(ContainerInterface $item):ContainerInterface
+    public function add(ContainerInterface $item)
     {
         $this->items[] = $item;
-        return $item;
     }
 
-    public function addFirst(ContainerInterface $item): ContainerInterface
+    public function addFirst(ContainerInterface $item)
     {
         array_unshift($this->items, $item);
         $this->current = null;
-        return $item;
     }
 
     public function remove(ContainerInterface $container): bool

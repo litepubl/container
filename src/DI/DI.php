@@ -6,13 +6,15 @@ use Psr\Container\ContainerInterface;
 class DI implements DIInterface, ContainerInterface
 {
     const TYPE = 'type';
+    const NAME = 'name';
     const VALUE = 'value';
     const CLASS_NAME = 'classname';
     const CALLBACK = 'callback';
-    protected $constructors;
+    protected $constructorArguments;
 
-    public function __construct()
+    public function __construct(ConstructorArgumentsInterface $constructorArguments)
     {
+        $this->constructorArguments = $constructorArguments;
     }
 
     public function get($className)
@@ -38,7 +40,7 @@ class DI implements DIInterface, ContainerInterface
 
     public function getArgs(string $className, ContainerInterface $container): array
     {
-        $args = $this->getConstructArgs($className);
+        $args = $this->getConstructorArguments($className);
         $result = [];
         foreach ($args as $arg) {
             $value = $arg[static::VALUE];
@@ -50,8 +52,8 @@ class DI implements DIInterface, ContainerInterface
                 
                 case static::CALLBACK:
                     $result[] = call_user_func_array($value, [
+                        $container,
                         $className,
-                        $container
                     ]);
                     break;
                 
@@ -67,10 +69,10 @@ class DI implements DIInterface, ContainerInterface
         return $result;
     }
 
-    protected function getConstructArgs(string $className): array
+    protected function getConstructorArguments(string $className): array
     {
-        if (isset($this->constructArgs[$className])) {
-            return $this->constructArgs[$className];
+        if ($this->constructorArguments->has($className)) {
+            return $this->constructorArguments->get($className);
         }
         
         $reflectedClass = new \ReflectionClass($className);
@@ -103,7 +105,7 @@ class DI implements DIInterface, ContainerInterface
             }
         }
         
-        $this->constructArgs[$className] = $result;
+        $this->constructorArguments->set($className, $result);
         return $result;
     }
 }
