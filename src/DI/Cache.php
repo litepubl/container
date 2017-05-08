@@ -2,14 +2,13 @@
 
 namespace litepubl\core\container\DI;
 
-class ConstructorArguments implements ConstructorArgumentsInterface
+class Cache implements CacheInterface
 {
     protected $items;
 
-    public function __construct(ContainerInterface $container, array $items, array $implementations)
+    public function __construct()
     {
-        $this->container = $container;
-        $this->items = $items;
+        $this->items = [];
     }
 
     public function get($className)

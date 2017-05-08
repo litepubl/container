@@ -10,11 +10,14 @@ class DI implements DIInterface, ContainerInterface
     const VALUE = 'value';
     const CLASS_NAME = 'classname';
     const CALLBACK = 'callback';
-    protected $constructorArguments;
 
-    public function __construct(ConstructorArgumentsInterface $constructorArguments)
+    protected $args;
+    protected $cache;
+
+    public function __construct(ArgsInterface $args, CacheInterface $cache)
     {
-        $this->constructorArguments = $constructorArguments;
+        $this->args = $args;
+        $this->cache = $cache;
     }
 
     public function get($className)
@@ -40,39 +43,46 @@ class DI implements DIInterface, ContainerInterface
 
     public function getArgs(string $className, ContainerInterface $container): array
     {
-        $args = $this->getConstructorArguments($className);
+        $args = $this->getConstructorArgs($className);
         $result = [];
-        foreach ($args as $arg) {
-            $value = $arg[static::VALUE];
-            
-            switch ($arg[static::TYPE]) {
-                case static::CLASS_NAME:
-                    $result[] = $container->get($value);
-                    break;
+        if (count($args)) {
+                $namedArgs = $this->args->get($className);
+            foreach ($args as $arg) {
+                $name = $arg[static::NAME];
+                if (isset($namedArgs[$name])) {
+                            $arg = $namedArgs[$name];
+                }
+
+                $value = $arg[static::VALUE];
+                switch ($arg[static::TYPE]) {
+                    case static::CLASS_NAME:
+                        $result[] = $container->get($value);
+                        break;
                 
-                case static::CALLBACK:
-                    $result[] = call_user_func_array($value, [
+                    case static::CALLBACK:
+                        $result[] = call_user_func_array($value, [
                         $container,
                         $className,
-                    ]);
-                    break;
+                        ]);
+                        break;
                 
-                case static::VALUE:
-                    $result[] = $value;
-                    break;
+                    case static::VALUE:
+                        $result[] = $value;
+                        break;
                 
-                default:
-                    throw new NotFound(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', $arg[static::TYPE], $arg[static::NAME], $className));
+                    default:
+                        throw new NotFound(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', $arg[static::TYPE], $arg[static::NAME], $className));
+                }
             }
         }
         
         return $result;
     }
 
-    protected function getConstructorArguments(string $className): array
+    protected function getConstructorArgs(string $className): array
     {
-        if ($this->constructorArguments->has($className)) {
-            return $this->constructorArguments->get($className);
+        if ($this->cache->has($className)) {
+            return $this->cache->get($className);
         }
         
         $reflectedClass = new \ReflectionClass($className);
@@ -105,7 +115,7 @@ class DI implements DIInterface, ContainerInterface
             }
         }
         
-        $this->constructorArguments->set($className, $result);
+        $this->cache->set($className, $result);
         return $result;
     }
 }

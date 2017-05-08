@@ -4,7 +4,7 @@ namespace litepubl\core\container\DI;
 
 use Psr\Container\ContainerInterface;
 
-interface ConstructorArgumentsInterface extends ContainerInterface
+interface CacheInterface extends ContainerInterface
 {
     public function set(string $className, array $args);
 }
