@@ -7,18 +7,20 @@ abstract class Base implements FactoryInterface
 {
     protected $container;
     protected $classMap;
+    protected $implementations;
 
     abstract protected function getClassMap(): array;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->implementations = [];
         $this->classMap = $this->getClassMap();
     }
 
     public function getImplementation(string $className): string
     {
-        return '';
+        return $this->implementations[$className] ?? '';
     }
 
     public function get($className)
