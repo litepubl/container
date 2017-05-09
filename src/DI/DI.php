@@ -5,11 +5,12 @@ use Psr\Container\ContainerInterface;
 
 class DI implements DIInterface, ContainerInterface
 {
-    const TYPE = 'type';
     const NAME = 'name';
+    const TYPE = 'type';
     const VALUE = 'value';
     const CLASS_NAME = 'classname';
     const CALLBACK = 'callback';
+    const UNDEFINED = 'undefined';
 
     protected $args;
     protected $cache;
@@ -63,15 +64,20 @@ class DI implements DIInterface, ContainerInterface
                         $result[] = call_user_func_array($value, [
                         $container,
                         $className,
+                        $name,
                         ]);
                         break;
                 
                     case static::VALUE:
                         $result[] = $value;
                         break;
+
+                    case static::UNDEFINED:
+                        throw new \InvalidArgumentException(sprintf('Undefined argument "%s" in constructor "%s"', $name, $className));
+                    break;
                 
                     default:
-                        throw new NotFound(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', $arg[static::TYPE], $arg[static::NAME], $className));
+                        throw new \InvalidArgumentException(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', $arg[static::TYPE], $name, $className));
                 }
             }
         }
@@ -87,7 +93,7 @@ class DI implements DIInterface, ContainerInterface
         
         $reflectedClass = new \ReflectionClass($className);
         if (!$reflectedClass->isInstantiable()) {
-            throw new \Exception($className);
+            throw new \UnexpectedValueException(sprintf('Class"%s" is not instantiable', $className));
         }
         
         $result = [];
@@ -110,7 +116,10 @@ class DI implements DIInterface, ContainerInterface
                         static::VALUE => $parameter->getDefaultValue()
                     ];
                 } else {
-                    throw new InjectionException("Parameter '$parameter->name' must have default value.");
+                    $result[] = [
+                        static::TYPE => static::UNDEFINED,
+                        static::NAME => $name,
+                    ];
                 }
             }
         }

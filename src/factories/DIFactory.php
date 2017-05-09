@@ -6,13 +6,13 @@ use Psr\Container\ContainerInterface;
 
 class DIFactory implements FactoryInterface
 {
-    protected $DI;
     protected $container;
+    protected $DI;
 
-    public function __construct(DIInterface $DI, ContainerInterface $container)
+    public function __construct(ContainerInterface $container, DIInterface $DI)
     {
-        $this->DI = $DI;
         $this->container = $container;
+        $this->DI = $DI;
     }
 
     public function get($className)
