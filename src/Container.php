@@ -94,4 +94,11 @@ class Container implements ContainerInterface
         $this->events->onAfterCreate($className, $result);
                 return $result;
     }
+
+    public function getInstances()
+    {
+        foreach ($this->items as $name => $instance) {
+            yield $name => $instance;
+        }
+    }
 }
