@@ -6,16 +6,12 @@ use Psr\Container\ContainerInterface;
 abstract class Base implements FactoryInterface
 {
     protected $container;
-    protected $classMap;
-    protected $implementations;
-
-    abstract protected function getClassMap(): array;
+    protected $classMap = [];
+    protected $implementations = [];
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->implementations = [];
-        $this->classMap = $this->getClassMap();
     }
 
     public function getImplementation(string $className): string

@@ -7,14 +7,14 @@ use Psr\Container\ContainerInterface as PsrContainerInterface;
 class Container implements ContainerInterface
 {
     protected $factory;
-    protected $eventManager;
+    protected $events;
     protected $items;
     protected $circleNames;
 
-    public function __construct(FactoryInterface $factory, EventsInterface $eventManager)
+    public function __construct(FactoryInterface $factory, EventsInterface $events)
     {
         $this->factory = $factory;
-        $this->eventManager = $eventManager;
+        $this->events = $events;
         $this->circleNames = [];
         $this->items = [
         'factory' => $factory,
@@ -25,33 +25,36 @@ class Container implements ContainerInterface
             'container' => $this,
             'instances' => $this,
             'services' => $this,
-        'instanceEvents' => $eventManager,
+        'instanceEvents' => $events,
         ];
     }
 
     public function get($className)
     {
         $className = ltrim($className, '\\');
-        if (isset($this->items[$className])) {
-            return $this->items[$className];
+        $result = $this->events->onBeforeGet($className);
+        if (!$result && isset($this->items[$className])) {
+            $result = $this->items[$className];
         }
+        if (!$result) {
+            if (!class_exists($className)) {
+                throw new NotFound($className);
+            }
         
-        if (!class_exists($className)) {
-            throw new NotFound($className);
+            if (in_array($className, $this->circleNames)) {
+                throw new Exception(sprintf('Class "%s" has circle dependencies, current classes stack ', $className, implode("\n", $this->circleNames)));
+            }
+        
+            $this->circleNames[] = $className;
+            try {
+                $result = $this->createInstance($className);
+                $this->items[$className] = $result;
+            } finally {
+                array_pop($this->circleNames);
+            }
         }
-        
-        if (in_array($className, $this->circleNames)) {
-            throw new Exception(sprintf('Class "%s" has circle dependencies, current classes stack ', $className, implode("\n", $this->circleNames)));
-        }
-        
-        $this->circleNames[] = $className;
-        try {
-            $result = $this->createInstance($className);
-            $this->items[$className] = $result;
-        } finally {
-            array_pop($this->circleNames);
-        }
-        
+ 
+        $this->events->onAfterGet($className, $result);
         return $result;
     }
 
@@ -67,18 +70,28 @@ class Container implements ContainerInterface
             $name = ltrim($name, '\\');
             $this->items[$name] = $instance;
         }
+
+        $this->events->onSet($instance, $name);
     }
 
     public function createInstance(string $className)
     {
-        if ($newClass = $this->factory->getImplementation($className)) {
-            $result = $this->get($newClass);
-        } elseif ($this->factory->has($className)) {
-            $result = $this->factory->get($className);
-        } else {
-                throw new NotFound($className);
+        $result = $this->events->onBeforeCreate($className);
+        if (!$result) {
+            if ($newClass = $this->factory->getImplementation($className)) {
+                $result = $this->get($newClass);
+            } elseif ($this->factory->has($className)) {
+                $result = $this->factory->get($className);
+            } else {
+                $result = $this->events->onNotFound($className);
+                if (!$result) {
+                                throw new NotFound($className);
+                }
+            }
         }
-        
-        return $result;
+
+
+        $this->events->onAfterCreate($className, $result);
+                return $result;
     }
 }
