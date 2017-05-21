@@ -4,6 +4,11 @@ namespace litepubl\core\container;
 
 class NullEvents implements EventsInterface
 {
+
+    public function setContainer(ContainerInterface $container)
+    {
+    }
+
     public function onBeforeGet(string $className)
     {
         return null;
