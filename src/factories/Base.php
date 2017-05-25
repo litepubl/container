@@ -70,6 +70,14 @@ abstract class Base implements FactoryInterface
             }
         }
 
-        return $this->get($installerClass);
+        if ($this->has($installerClass)) {
+                $result = $this->get($installerClass);
+        } elseif ($this->container->has(installerClass)) {
+                $result = $this->container->get(installerClass);
+        } else {
+                throw new NotFound(installerClass);
+        }
+
+        return $result;
     }
 }
