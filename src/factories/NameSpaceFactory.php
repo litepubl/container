@@ -36,4 +36,10 @@ class NameSpaceFactory implements FactoryInterface
     {
         return '';
     }
+
+    public function getInstaller(string $className): InstallerInterface
+    {
+        $factory = $this->get($className);
+        return $factory->getInstaller($className);
+    }
 }

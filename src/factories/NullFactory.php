@@ -20,4 +20,9 @@ class NullFactory implements FactoryInterface
     {
         return '';
     }
+
+    public function getInstaller(string $className): InstallerInterface
+    {
+        return new NullInstaller();
+    }
 }

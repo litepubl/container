@@ -17,16 +17,21 @@ class Items implements FactoryInterface
         $this->implementations = $implementations;
     }
 
-    public function get($className)
+    protected function getFactory($className): FactoryInterface
     {
-        $className = ltrim($className, '\\');
         if (isset($this->items[$className])) {
             $factoryClass = $this->items[$className];
-            $factory = $this->container->get($factoryClass);
-            return $factory->get($className);
+            return $this->container->get($factoryClass);
         }
         
         throw new NotFound($className);
+    }
+
+    public function get($className)
+    {
+        $className = ltrim($className, '\\');
+        $factory = $this->getFactory($className);
+            return $factory->get($className);
     }
 
     public function has($className)
@@ -41,5 +46,12 @@ class Items implements FactoryInterface
         }
 
         return '';
+    }
+
+    public function getInstaller(string $className): InstallerInterface
+    {
+        $className = ltrim($className, '\\');
+        $factory = $this->getFactory($className);
+            return $factory->getInstaller($className);
     }
 }

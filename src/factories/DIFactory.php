@@ -29,4 +29,9 @@ class DIFactory implements FactoryInterface
     {
         return '';
     }
+
+    public function getInstaller(string $className): InstallerInterface
+    {
+        return $this->container->get(InstallerInterface::class);
+    }
 }

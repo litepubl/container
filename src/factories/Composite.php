@@ -27,4 +27,18 @@ class Composite extends PatternComposite implements FactoryInterface
 
         return '';
     }
+
+    public function getInstaller(string $className): InstallerInterface
+    {
+        if (($this->current !== null) && isset($this->items[$this->current]) && $this->items[$this->current]->has($className)) {
+                return $this->items[$this->current]->getInstaller($className);
+        }
+
+        foreach ($this->items as $i => $factory) {
+            if ($factory->has($className)) {
+                $this->current = $i;
+                return $factory->getInstaller($className);
+            }
+        }
+    }
 }

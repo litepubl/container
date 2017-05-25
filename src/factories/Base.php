@@ -52,4 +52,9 @@ abstract class Base implements FactoryInterface
     {
         $this->classMap[$className] = $method;
     }
+
+    public function getInstaller(string $className): InstallerInterface
+    {
+        return $this->container->get(InstallerInterface::class);
+    }
 }
