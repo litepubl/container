@@ -4,6 +4,7 @@ namespace litepubl\core\container\factories;
 
 interface InstallerInterface
 {
-    public function install();
-    public function uninstall();
+    const INSTALLER = 'installer';
+    public function install($instance);
+    public function uninstall($instance);
 }

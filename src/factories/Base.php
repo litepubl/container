@@ -8,6 +8,7 @@ abstract class Base implements FactoryInterface
     protected $container;
     protected $classMap = [];
     protected $implementations = [];
+    protected $installers = [];
 
     public function __construct(ContainerInterface $container)
     {
@@ -55,6 +56,20 @@ abstract class Base implements FactoryInterface
 
     public function getInstaller(string $className): InstallerInterface
     {
-        return $this->container->get(InstallerInterface::class);
+        $className = ltrim($className, '\\');
+        if (isset($this->installers[$className])) {
+                $installerClass = $this->installers[$className];
+        } elseif (class_exists($className . InstallerInterface::INSTALLER)) {
+                $installerClass = $className . InstallerInterface::INSTALLER;
+        } else {
+            $ns = substr($className, 0, strrpos($className, '\\') + 1);
+            if (class_exists($ns .InstallerInterface::INSTALLER)) {
+                $installerClass = $ns . InstallerInterface::INSTALLER;
+            } else {
+                return $this->container->get(InstallerInterface::class);
+            }
+        }
+
+        return $this->get($installerClass);
     }
 }

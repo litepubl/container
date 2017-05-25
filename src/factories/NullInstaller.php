@@ -4,11 +4,11 @@ namespace litepubl\core\container\factories;
 
 class NullInstaller implements InstallerInterface
 {
-    public function install()
+    public function install($instance)
     {
     }
 
-    public function uninstall()
+    public function uninstall($instance)
     {
     }
 }
