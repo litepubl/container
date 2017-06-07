@@ -4,7 +4,7 @@ namespace litepubl\core\container;
 use litepubl\core\container\factories\FactoryInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
-class Container implements ContainerInterface
+class Container implements ContainerInterface, IterableContainerInterface
 {
     protected $factory;
     protected $events;
@@ -21,6 +21,7 @@ class Container implements ContainerInterface
         get_class($factory) => $factory,
          get_class($this) => $this,
             ContainerInterface::class => $this,
+        IterableContainerInterface::class => $this,
             PsrContainerInterface::class => $this,
             'container' => $this,
             'instances' => $this,

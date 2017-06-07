@@ -8,5 +8,4 @@ interface ContainerInterface extends PsrContainerInterface
 {
     public function set($instance, string $name = '');
     public function createInstance(string $className);
-    public function getInstances();
 }
