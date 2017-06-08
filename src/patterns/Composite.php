@@ -3,8 +3,10 @@
 namespace litepubl\core\container\patterns;
 
 use Psr\Container\ContainerInterface;
+use litepubl\core\container\IterableContainerInterface;
+use litepubl\core\container\NotFound;
 
-class Composite implements ContainerInterface
+class Composite implements ContainerInterface, IterableContainerInterface
 {
     protected $items;
     protected $current;
@@ -27,7 +29,7 @@ class Composite implements ContainerInterface
             }
         }
 
-        throw new NotFound(sprintf('Class %s not found', $className));
+        throw new NotFound($className);
     }
 
     public function has($className)
@@ -68,5 +70,10 @@ class Composite implements ContainerInterface
         }
 
         return false;
+    }
+
+    public function getInstances()
+    {
+        return $this->items;
     }
 }

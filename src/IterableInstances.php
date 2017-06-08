@@ -2,20 +2,49 @@
 
 namespace litepubl\core\container;
 
-class IterableInstances
+class IterableInstances implements IterableContainerInterface
 {
     protected $container;
-    protected $generator;
+    protected $condition;
 
     public function __construct(IterableContainerInterface $container)
     {
         $this->container = $container;
-        $this->generator = null;
+    }
+
+    public function setCondition(callable $condition): IterableInstances
+    {
+        $this->condition  = $condition;
+        return $this;
+    }
+
+    public function getInstances()
+    {
+        return $this->extractInstances($this->container->getInstances());
+    }
+
+    protected function extractInstances($instances)
+    {
+        $condition = $this->condition;
+        foreach ($instances as $instance) {
+            if (!$condition || $condition($instance)) {
+                yield $instance;
+            }
+
+            if ($instance instanceof IterableContainerInterface) {
+                $instances2 = $this->extractInstances($instance->getInstances());
+                foreach ($instances as $instance) {
+                    if (!$condition || $condition($instance2)) {
+                        yield $instance2;
+                    }
+                }
+            }
+        }
     }
 
     public function __call($name, $args)
     {
-        $instances = $this->generator ?? $this->container->getInstances();
+        $instances = $this->getInstances();
         foreach ($instances as $instance) {
             call_user_func_array([$instance, $name], $args);
         }
@@ -25,7 +54,7 @@ class IterableInstances
 
     public function callback(callable $callback): IterableInstances
     {
-        $instances = $this->generator ?? $this->container->getInstances();
+        $instances = $this->getInstances();
         foreach ($instances as $instance) {
             $callback($instance);
         }
@@ -33,19 +62,12 @@ class IterableInstances
         return $this;
     }
 
-    public function forInstanceOf(string $className): IterableInstances
+    public function forClass(string $className): IterableInstances
     {
-        $this->generator = $this->getInstancesOf($className);
-        return $this;
-    }
+        $this->condition = function ($instance) use ($className) {
+                return $instance instanceof $className;
+        };
 
-    public function getInstancesOf(string $className)
-    {
-        $instances = $this->container->getInstances();
-        foreach ($instances as $instance) {
-            if ($instance instanceof $className) {
-                yield $instance;
-            }
-        }
+        return $this;
     }
 }
