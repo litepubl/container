@@ -6,6 +6,7 @@ class IterableInstances implements IterableContainerInterface
 {
     protected $container;
     protected $condition;
+    protected $callback;
 
     public function __construct(IterableContainerInterface $container)
     {
@@ -15,6 +16,12 @@ class IterableInstances implements IterableContainerInterface
     public function setCondition(callable $condition): IterableInstances
     {
         $this->condition  = $condition;
+        return $this;
+    }
+
+    public function setCallback(callable $callback): IterableInstances
+    {
+        $this->callback = $callback;
         return $this;
     }
 
@@ -44,9 +51,13 @@ class IterableInstances implements IterableContainerInterface
 
     public function __call($name, $args)
     {
+        $callback = $this->callback;
         $instances = $this->getInstances();
         foreach ($instances as $instance) {
-            call_user_func_array([$instance, $name], $args);
+            $result = call_user_func_array([$instance, $name], $args);
+            if ($callback) {
+                        $callback($instance, $result);
+            }
         }
 
         return $this;

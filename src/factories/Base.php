@@ -24,20 +24,25 @@ abstract class Base implements FactoryInterface
     {
         $className = ltrim($className, '\\');
         if (isset($this->classMap[$className])) {
+            $result = null;
             $method = $this->classMap[$className];
             if ($method && method_exists($this, $method)) {
-                        return $this->$method();
+                        $result = $this->$method();
+            } else {
+                $name = substr($className, strrpos($className, '\\') + 1);
+                $method = 'create' . $name;
+                if (method_exists($this, $method)) {
+                        $result = $this->$method();
+                } else {
+                    $method = 'get' . $name;
+                    if (method_exists($this, $method)) {
+                        $result = $this->$method();
+                    }
+                }
             }
 
-            $name = substr($className, strrpos($className, '\\') + 1);
-            $method = 'create' . $name;
-            if (method_exists($this, $method)) {
-                        return $this->$method();
-            }
-
-            $method = 'get' . $name;
-            if (method_exists($this, $method)) {
-                        return $this->$method();
+            if ($result) {
+                        return $result;
             }
         }
         
