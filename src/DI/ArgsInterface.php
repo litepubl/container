@@ -4,8 +4,7 @@ namespace litepubl\core\container\DI;
 
 use Psr\Container\ContainerInterface;
 
-interface ArgsInterface
+interface ArgsInterface extends ContainerInterface
 {
-    public function get(string $className): array;
     public function set(string $className, array $args);
 }

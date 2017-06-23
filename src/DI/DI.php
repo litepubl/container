@@ -48,10 +48,12 @@ class DI implements DIInterface, ContainerInterface
         $result = [];
         if (count($args)) {
                 $namedArgs = $this->args->get($className);
-            foreach ($args as $arg) {
+            foreach ($args as $i => $arg) {
                 $name = $arg[static::NAME];
                 if (isset($namedArgs[$name])) {
                             $arg = $namedArgs[$name];
+                } elseif (isset($namedArgs[$i])) {
+                            $arg = $namedArgs[$i];
                 }
 
                 $value = $arg[static::VALUE];
