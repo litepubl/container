@@ -30,6 +30,26 @@ class Container implements ContainerInterface, IterableContainerInterface
         ];
     }
 
+    public function getFactory(): FactoryInterface
+    {
+        return $this->factory;
+    }
+
+    public function setFactory(FactoryInterface $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    public function getEvents(): EventsInterface
+    {
+        return $this->events;
+    }
+
+    public function setEvents(EventsInterface $events)
+    {
+        $this->events = $events;
+    }
+
     public function get($className)
     {
         $className = ltrim($className, '\\');
