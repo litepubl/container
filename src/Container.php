@@ -58,6 +58,7 @@ class Container implements ContainerInterface, IterableContainerInterface
         if (!$result && isset($this->items[$className])) {
             $result = $this->items[$className];
         }
+
         if (!$result) {
             if (!class_exists($className)) {
                 throw new NotFound($className);
@@ -122,5 +123,28 @@ class Container implements ContainerInterface, IterableContainerInterface
         foreach ($this->items as $name => $instance) {
             yield $name => $instance;
         }
+    }
+
+    public function delete(string $className): bool
+    {
+        if (isset($this->items[$className])) {
+                unset($this->items[$className]);
+                return true;
+        }
+
+        return false;
+    }
+
+    public function remove($instance): bool
+    {
+        $result = false;
+        foreach ($this->items as $name => $item) {
+            if ($instance === $item) {
+                unset($this->items[$name]);
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 }
