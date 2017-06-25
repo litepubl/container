@@ -1,8 +1,8 @@
 <?php
 
-namespace litepubl\core\container\factories;
+namespace LitePubl\Core\Container\Factories;
 
-use litepubl\core\container\NotFound;
+use LitePubl\Core\Container\NotFound;
 
 class NullFactory implements FactoryInterface
 {

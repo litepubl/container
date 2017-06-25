@@ -1,5 +1,5 @@
 <?php
-namespace litepubl\core\container\DI;
+namespace LitePubl\Core\Container\DI;
 
 use Psr\Container\ContainerInterface;
 

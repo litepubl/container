@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\container;
+namespace LitePubl\Core\Container;
 
 class NullEvents implements EventsInterface
 {

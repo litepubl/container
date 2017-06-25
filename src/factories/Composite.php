@@ -1,8 +1,8 @@
 <?php
 
-namespace litepubl\core\container\factories;
+namespace LitePubl\Core\Container\Factories;
 
-use litepubl\core\container\patterns\Composite as PatternComposite;
+use LitePubl\Core\Container\patterns\Composite as PatternComposite;
 
 class Composite extends PatternComposite implements FactoryInterface
 {

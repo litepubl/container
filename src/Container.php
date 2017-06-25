@@ -1,7 +1,8 @@
 <?php
-namespace litepubl\core\container;
 
-use litepubl\core\container\factories\FactoryInterface;
+namespace LitePubl\Core\Container;
+
+use LitePubl\Core\Container\Factories\FactoryInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 class Container implements ContainerInterface, IterableContainerInterface

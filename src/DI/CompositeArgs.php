@@ -1,9 +1,9 @@
 <?php
 
-namespace litepubl\core\container\DI;
+namespace LitePubl\Core\Container\DI;
 
-use litepubl\core\container\patterns\Composite;
-use litepubl\core\container\NotFound;
+use LitePubl\Core\Container\patterns\Composite;
+use LitePubl\Core\Container\NotFound;
 
 class CompositeArgs extends Composite implements ArgsInterface
 {

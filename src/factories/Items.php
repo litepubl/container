@@ -1,8 +1,8 @@
 <?php
-namespace litepubl\core\container\factories;
+namespace LitePubl\Core\Container\Factories;
 
 use Psr\Container\ContainerInterface;
-use litepubl\core\container\NotFound;
+use LitePubl\Core\Container\NotFound;
 
 class Items implements FactoryInterface
 {

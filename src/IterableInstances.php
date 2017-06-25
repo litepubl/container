@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\container;
+namespace LitePubl\Core\Container;
 
 class IterableInstances implements IterableContainerInterface
 {
@@ -40,7 +40,7 @@ class IterableInstances implements IterableContainerInterface
 
             if ($instance instanceof IterableContainerInterface) {
                 $instances2 = $this->extractInstances($instance->getInstances());
-                foreach ($instances as $instance) {
+                foreach ($instances2 as $instance2) {
                     if (!$condition || $condition($instance2)) {
                         yield $instance2;
                     }

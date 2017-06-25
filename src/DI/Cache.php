@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\container\DI;
+namespace LitePubl\Core\Container\DI;
 
 class Cache implements CacheInterface
 {

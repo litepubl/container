@@ -1,10 +1,10 @@
 <?php
 
-namespace litepubl\core\container\patterns;
+namespace LitePubl\Core\Container\patterns;
 
 use Psr\Container\ContainerInterface;
-use litepubl\core\container\IterableContainerInterface;
-use litepubl\core\container\NotFound;
+use LitePubl\Core\Container\IterableContainerInterface;
+use LitePubl\Core\Container\NotFound;
 
 class Composite implements ContainerInterface, IterableContainerInterface
 {

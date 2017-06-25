@@ -1,7 +1,7 @@
 <?php
-namespace litepubl\core\container\factories;
+namespace LitePubl\Core\Container\Factories;
 
-use litepubl\core\container\DI\DIInterface;
+use LitePubl\Core\Container\DI\DIInterface;
 use Psr\Container\ContainerInterface;
 
 class DIFactory implements FactoryInterface

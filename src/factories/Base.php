@@ -1,5 +1,5 @@
 <?php
-namespace litepubl\core\container\factories;
+namespace LitePubl\Core\Container\Factories;
 
 use Psr\Container\ContainerInterface;
 
