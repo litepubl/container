@@ -65,7 +65,7 @@ class Container implements ContainerInterface, IterableContainerInterface
             }
         
             if (in_array($className, $this->circleNames)) {
-                throw new Exception(sprintf('Class "%s" has circle dependencies, current classes stack ', $className, implode("\n", $this->circleNames)));
+                throw new CircleException(sprintf('Class "%s" has circle dependencies, current classes stack ', $className, implode("\n", $this->circleNames)));
             }
         
             $this->circleNames[] = $className;

@@ -8,6 +8,7 @@ use LitePubl\Core\Container\EventsInterface;
 use LitePubl\Core\Container\Factories\FactoryInterface;
 use LitePubl\Core\Container\IterableContainerInterface;
 use LitePubl\Core\Container\Exception;
+use LitePubl\Core\Container\CircleException;
 use LitePubl\Core\Container\NotFound;
 use Psr\Container\NotFoundExceptionInterface ;
 use Prophecy\Argument;
@@ -68,12 +69,27 @@ class ContainerTest extends \Codeception\Test\Unit
         $factory->getImplementation(Argument::type('string'))->willReturn('');
         $factory->has(Argument::type('string'))->willReturn(false);
         $container->setFactory($factory->reveal());
+
         $this->tester->expectException(NotFoundExceptionInterface ::class, function () use ($container) {
                 $container->get(Mok::class);
         });
 
-        $this->tester->expectException(NotFoundExceptionInterface ::class, function () use ($container) {
-                $container->createInstance(Mok::class);
+        $factory->has(Mok::class)->willReturn(true);
+        $factory->get(Mok::class)->willReturn(new Mok());
+        $container->setFactory($factory->reveal());
+
+                $this->assertInstanceOf(Mok::class, $container->createInstance(Mok::class));
+                $this->assertInstanceOf(Mok::class, $container->get(Mok::class));
+                $this->assertTrue($container->has(Mok::class));
+
+        $factory->get(Mok::class)->will(function () use ($container) {
+            return $container->get(Mok::class);
+        });
+
+        $container->setFactory($factory->reveal());
+        $container->delete(Mok::class);
+        $this->tester->expectException(CircleException::class, function () use ($container) {
+                $container->get(Mok::class);
         });
     }
 }
