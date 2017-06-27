@@ -51,12 +51,13 @@ class DI implements DIInterface, ContainerInterface
             foreach ($args as $i => $arg) {
                 $name = $arg[static::NAME];
                 if (isset($namedArgs[$name])) {
-                            $arg = $namedArgs[$name];
+                            $value = $namedArgs[$name];
                 } elseif (isset($namedArgs[$i])) {
-                            $arg = $namedArgs[$i];
+                            $value = $namedArgs[$i];
+                } else {
+                                $value = $arg[static::VALUE];
                 }
 
-                $value = $arg[static::VALUE];
                 switch ($arg[static::TYPE]) {
                     case static::CLASS_NAME:
                         $result[] = $container->get($value);
