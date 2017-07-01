@@ -2,6 +2,8 @@
 
 namespace LitePubl\Core\Container\DI;
 
+use LitePubl\Core\Container\NotFound;
+
 class Cache implements CacheInterface
 {
     protected $items;

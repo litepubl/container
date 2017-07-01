@@ -23,7 +23,7 @@ class Args implements ArgsInterface
 
     public function has($className)
     {
-        return isset($this->items[$className);
+        return isset($this->items[$className]);
     }
 
     public function set(string $className, array $args)

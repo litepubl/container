@@ -80,7 +80,7 @@ class DI implements DIInterface, ContainerInterface
                     break;
                 
                     default:
-                        throw new \InvalidArgumentException(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', $arg[static::TYPE], $name, $className));
+                        throw new UnknownArgTypeException(sprintf('Unknown "%s" argument type for "%s" in constructor "%s"', arg[static::TYPE], $name, $className));
                 }
             }
         }
@@ -96,7 +96,7 @@ class DI implements DIInterface, ContainerInterface
         
         $reflectedClass = new \ReflectionClass($className);
         if (!$reflectedClass->isInstantiable()) {
-            throw new \UnexpectedValueException(sprintf('Class"%s" is not instantiable', $className));
+            throw new UninstantiableException($className);
         }
         
         $result = [];
