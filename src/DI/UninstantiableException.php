@@ -4,14 +4,14 @@ namespace LitePubl\Core\Container\DI;
 
 class UninstantiableException extends \UnexpectedValueException
 {
-    const MESSAGE = 'Class"%s" is not instantiable';
+    const FORMAT = 'Class"%s" is not instantiable';
     protected $className;
 
-    public function __construct(string $className)
+    public function __construct(string $className, \Throwable $previous = null)
     {
         $this->className = $className;
 
-        parent::__construct(sprintf(static::MESSAGE, $className));
+        parent::__construct(sprintf(static::FORMAT, $className), 0, $previous);
     }
 
     public function getClassName(): string

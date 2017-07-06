@@ -4,7 +4,7 @@ namespace LitePubl\Core\Container\DI;
 
 use LitePubl\Core\Container\NotFound;
 
-class Cache implements CacheInterface
+class Cache implements ArgsInterface
 {
     protected $items;
 
