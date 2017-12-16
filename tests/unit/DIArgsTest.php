@@ -16,7 +16,7 @@ class DIArgsTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    public function testDICache()
+    public function testDIArgs()
     {
         $args = new args();
         $this->assertInstanceOf(Args::class, $args);

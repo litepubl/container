@@ -45,7 +45,12 @@ class DI implements DIInterface, ContainerInterface
     {
         $args = $this->getCachedArgs($className);
         if (count($args)) {
+            if ($this->args->has($className)) {
                 $namedArgs = $this->args->get($className);
+            } else {
+                $namedArgs = [];
+            }
+
             return $this->mergeArgs($container, $args, $namedArgs);
         }
 

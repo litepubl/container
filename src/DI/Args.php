@@ -2,6 +2,8 @@
 
 namespace LitePubl\Core\Container\DI;
 
+use LitePubl\Core\Container\NotFound;
+
 class Args implements ArgsInterface
 {
     protected $items;
@@ -17,8 +19,8 @@ class Args implements ArgsInterface
         if (isset($this->items[$className])) {
             return $this->items[$className];
         }
-        
-        return [];
+
+        throw new NotFound($className);
     }
 
     public function has($className)

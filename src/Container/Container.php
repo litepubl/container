@@ -1,11 +1,16 @@
 <?php
 
-namespace LitePubl\Core\Container;
+namespace LitePubl\Core\Container\Container;
 
-use LitePubl\Core\Container\Factories\FactoryInterface;
+use LitePubl\Core\Container\Interfaces\ContainerInterface;
+use LitePubl\Core\Container\Interfaces\EventsInterface;
+use LitePubl\Core\Container\Interfaces\FactoryInterface;
+use LitePubl\Core\Container\Exceptions\NotFound;
+use LitePubl\Core\Container\Exceptions\CircleException;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+use \IteratorAggregate;
 
-class Container implements ContainerInterface, IterableContainerInterface
+class Container implements ContainerInterface, IteratorAggregate
 {
     protected $factory;
     protected $events;
@@ -113,22 +118,20 @@ class Container implements ContainerInterface, IterableContainerInterface
             }
         }
 
-
         $this->events->onAfterCreate($className, $result);
                 return $result;
     }
 
-    public function getInstances()
+    public function getIterator()
     {
-        foreach ($this->items as $name => $instance) {
-            yield $name => $instance;
-        }
+        return new \ArrayIterator($this->items);
     }
 
     public function delete(string $className): bool
     {
         if (isset($this->items[$className])) {
                 unset($this->items[$className]);
+            $this->events->onDeleted($className);
                 return true;
         }
 
@@ -143,6 +146,10 @@ class Container implements ContainerInterface, IterableContainerInterface
                 unset($this->items[$name]);
                 $result = true;
             }
+        }
+
+        if ($result) {
+            $this->events->onRemoved($instance);
         }
 
         return $result;

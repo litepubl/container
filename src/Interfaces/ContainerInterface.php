@@ -1,9 +1,8 @@
 <?php
 
-namespace LitePubl\Core\Container;
+namespace LitePubl\Core\Container\Interfaces;
 
 use Psr\Container\ContainerInterface as PsrContainerInterface;
-use LitePubl\Core\Container\Factories\FactoryInterface;
 
 interface ContainerInterface extends PsrContainerInterface
 {

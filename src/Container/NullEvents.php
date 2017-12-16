@@ -1,6 +1,8 @@
 <?php
 
-namespace LitePubl\Core\Container;
+namespace LitePubl\Core\Container\Container;
+
+use LitePubl\Core\Container\Interfaces\EventsInterface;
 
 class NullEvents implements EventsInterface
 {
@@ -34,5 +36,13 @@ class NullEvents implements EventsInterface
     public function onNotFound(string $className)
     {
         return null;
+    }
+
+    public function onDeleted(string $className)
+    {
+    }
+
+    public function onRemoved($instance)
+    {
     }
 }

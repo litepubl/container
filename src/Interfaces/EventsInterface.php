@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Core\Container;
+namespace LitePubl\Core\Container\Interfaces;
 
 interface EventsInterface
 {
@@ -11,4 +11,6 @@ interface EventsInterface
     public function onBeforeCreate(string $className);
     public function onAfterCreate(string $className, $instance);
     public function onNotFound(string $className);
+    public function onDeleted(string $className);
+    public function onRemoved($instance);
 }
