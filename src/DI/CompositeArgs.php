@@ -3,7 +3,7 @@
 namespace LitePubl\Core\Container\DI;
 
 use LitePubl\Core\Container\patterns\Composite;
-use LitePubl\Core\Container\NotFound;
+use LitePubl\Core\Container\Exceptions\NotFound;
 
 class CompositeArgs extends Composite implements ArgsInterface
 {

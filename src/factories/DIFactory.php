@@ -1,8 +1,10 @@
 <?php
 namespace LitePubl\Core\Container\Factories;
 
-use LitePubl\Core\Container\DI\DIInterface;
-use Psr\Container\ContainerInterface;
+use LitePubl\Core\Container\Interfaces\FactoryInterface;
+use LitePubl\Core\Container\Interfaces\DIInterface;
+use LitePubl\Core\Container\Interfaces\InstallerInterface;
+use Psr\Container\Interfaces\ContainerInterface;
 
 class DIFactory implements FactoryInterface
 {
