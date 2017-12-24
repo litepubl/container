@@ -24,9 +24,7 @@ class ForClass implements IteratorAggregate
                     yield $name => $instance;
                 } elseif ($instance instanceof iterable) {
                     $self = new self($instance, $this->className);
-                    foreach ($self as $name2 => $instance2) {
-                        yield $name2 => $instance2;
-                    }
+                    yield from $self;
                 }
             }
         })();
