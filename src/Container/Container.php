@@ -9,12 +9,13 @@ use LitePubl\Core\Container\Exceptions\NotFound;
 use LitePubl\Core\Container\Exceptions\CircleException;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use \IteratorAggregate;
+use \ArrayIterator;
 
 class Container implements ContainerInterface, IteratorAggregate
 {
+    protected $items;
     protected $factory;
     protected $events;
-    protected $items;
     protected $circleNames;
 
     public function __construct(FactoryInterface $factory, EventsInterface $events)
@@ -27,7 +28,6 @@ class Container implements ContainerInterface, IteratorAggregate
         get_class($factory) => $factory,
          get_class($this) => $this,
             ContainerInterface::class => $this,
-        IterableContainerInterface::class => $this,
             PsrContainerInterface::class => $this,
             'container' => $this,
             'instances' => $this,
@@ -124,7 +124,7 @@ class Container implements ContainerInterface, IteratorAggregate
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->items);
+        return new ArrayIterator($this->items);
     }
 
     public function delete(string $className): bool
