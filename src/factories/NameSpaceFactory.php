@@ -1,6 +1,8 @@
 <?php
-namespace LitePubl\Core\Container\Factories;
 
+namespace LitePubl\Container\Factories;
+
+use LitePubl\Container\Interfaces\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 class NameSpaceFactory implements FactoryInterface
@@ -21,9 +23,9 @@ class NameSpaceFactory implements FactoryInterface
 
     public function get($className)
     {
-        $factoryClass = $this->getFactoryClass($classname);
+        $factoryClass = $this->getFactoryClass($className);
         $factory = $this->container->get($factoryClass);
-        return $factory->get($classname);
+        return $factory->get($className);
     }
 
     public function has($className)

@@ -1,8 +1,8 @@
 <?php
 
-namespace LitePubl\Core\Container\Container;
+namespace LitePubl\Container\Container;
 
-use LitePubl\Core\Container\Interfaces\EventsInterface;
+use LitePubl\Container\Interfaces\EventsInterface;
 
 class NullEvents implements EventsInterface
 {

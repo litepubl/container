@@ -1,12 +1,12 @@
 <?php
 
-namespace LitePubl\Core\Container\Container;
+namespace LitePubl\Container\Container;
 
-use LitePubl\Core\Container\Interfaces\ContainerInterface;
-use LitePubl\Core\Container\Interfaces\EventsInterface;
-use LitePubl\Core\Container\Interfaces\FactoryInterface;
-use LitePubl\Core\Container\Exceptions\NotFound;
-use LitePubl\Core\Container\Exceptions\CircleException;
+use LitePubl\Container\Interfaces\ContainerInterface;
+use LitePubl\Container\Interfaces\EventsInterface;
+use LitePubl\Container\Interfaces\FactoryInterface;
+use LitePubl\Container\Exceptions\NotFound;
+use LitePubl\Container\Exceptions\CircleException;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use \IteratorAggregate;
 use \ArrayIterator;

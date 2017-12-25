@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Core\Container;
+namespace LitePubl\Container;
 
 use Psr\Container\NotFoundExceptionInterface ;
 

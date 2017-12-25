@@ -1,6 +1,8 @@
 <?php
-namespace LitePubl\Core\Container\Factories;
 
+namespace LitePubl\Container\Factories;
+
+use LitePubl\Container\Interfaces\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 abstract class Base implements FactoryInterface

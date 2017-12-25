@@ -1,11 +1,12 @@
 <?php
 
-namespace LitePubl\Core\Container\patterns;
+namespace LitePubl\Container\patterns;
 
 use Psr\Container\ContainerInterface;
 use LitePubl\Core\Container\IterableContainerInterface;
-use LitePubl\Core\Container\Exceptions\NotFound;
+use LitePubl\Container\Exceptions\NotFound;
 use \IteratorAggregate;
+use \ArrayIterator;
 
 class Composite implements ContainerInterface, IteratorAggregate
 {
@@ -51,7 +52,7 @@ class Composite implements ContainerInterface, IteratorAggregate
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->items);
+        return new ArrayIterator($this->items);
     }
 
     public function add(ContainerInterface $item)

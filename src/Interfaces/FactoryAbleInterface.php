@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Core\Container\Interfaces;
+namespace LitePubl\Container\Interfaces;
 
 interface FactoryAbleInterface
 {

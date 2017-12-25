@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Core\Container\patterns;
+namespace LitePubl\Container\patterns;
 
 use Psr\Container\ContainerInterface;
 

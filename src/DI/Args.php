@@ -1,9 +1,9 @@
 <?php
-namespace LitePubl\Core\Container\DI;
+namespace LitePubl\Container\DI;
 
-use LitePubl\Core\Container\Interfaces\ArgsInterface;
-use LitePubl\Core\Container\Interfaces\CacheReflectionInterface;
-use LitePubl\Core\Container\Exceptions\NotFound;
+use LitePubl\Container\Interfaces\ArgsInterface;
+use LitePubl\Container\Interfaces\CacheReflectionInterface;
+use LitePubl\Container\Exceptions\NotFound;
 use Psr\Container\ContainerInterface;
 
 class Args implements ArgsInterface

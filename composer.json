@@ -8,7 +8,7 @@
         "framework",
         "blog"
     ],
-    "homepage": "https:\/\/github.com\/litepubl\/cms",
+    "homepage": "https:\/\/github.com\/litepubl\/container",
     "license": "MIT",
     "authors": [
         {
@@ -20,16 +20,16 @@
     ],
     "support": {
         "email": "yarrowsoft@gmail.com",
-        "source": "https:\/\/github.com\/litepubl\/cms\/releases",
+        "source": "https:\/\/github.com\/litepubl\/container\/releases",
         "doc": "http:\/\/litepublisher.ru\/"
     },
     "require": {
-        "php": ">=7.00.0",
+        "php": ">=7.1.0",
         "psr/container": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "litepubl\\core\\container\\": "src/"
+            "LitePubl\\Container\\": "src/"
         }
     }
 }

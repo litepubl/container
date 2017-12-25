@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Core\Container\DI;
+namespace LitePubl\Container;
 
 class UninstantiableException extends \UnexpectedValueException
 {

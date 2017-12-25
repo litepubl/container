@@ -1,7 +1,7 @@
 <?php
-namespace LitePubl\Core\Container\DI;
+namespace LitePubl\Container\DI;
 
-use LitePubl\Core\Container\Interfaces\DIInterface;
+use LitePubl\Container\Interfaces\DIInterface;
 use Psr\Container\ContainerInterface;
 
 class DI implements DIInterface, ContainerInterface
