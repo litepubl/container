@@ -28,4 +28,13 @@ class ForClass implements IteratorAggregate
             }
         })();
     }
+
+    public function __call($name, $args)
+    {
+        foreach ($this as $instance) {
+            call_user_func_array([$instance, $name], $args);
+        }
+
+        return $this;
+    }
 }
