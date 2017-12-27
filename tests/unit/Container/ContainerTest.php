@@ -1,17 +1,19 @@
 <?php
 
-namespace LitePubl\Tests\Container;
+namespace tests\container\unit\Container;
 
-use LitePubl\Core\Container\Container;
-use LitePubl\Core\Container\ContainerInterface;
-use LitePubl\Core\Container\EventsInterface;
-use LitePubl\Core\Container\Factories\FactoryInterface;
-use LitePubl\Core\Container\IterableContainerInterface;
-use LitePubl\Core\Container\Exception;
-use LitePubl\Core\Container\CircleException;
-use LitePubl\Core\Container\NotFound;
+use LitePubl\Container\Container\Container;
+use LitePubl\Container\Interfaces\ContainerInterface;
+use LitePubl\Container\Interfaces\EventsInterface;
+use LitePubl\Container\Interfaces\FactoryInterface;
+use LitePubl\Container\Exceptions\Exception;
+use LitePubl\Container\Exceptions\CircleException;
+use LitePubl\Container\Exceptions\NotFound;
 use Psr\Container\NotFoundExceptionInterface ;
 use Prophecy\Argument;
+use tests\container\unit\Mok;
+use \IteratorAggregate;
+use \ArrayIterator;
 
 class ContainerTest extends \Codeception\Test\Unit
 {
@@ -27,7 +29,7 @@ class ContainerTest extends \Codeception\Test\Unit
         $container = new Container($factory->reveal(), $events->reveal());
         $this->assertInstanceOf(Container::class, $container);
         $this->assertInstanceOf(ContainerInterface::class, $container);
-        $this->assertInstanceOf(IterableContainerInterface::class, $container);
+        $this->assertInstanceOf(IteratorAggregate::class, $container);
         $this->assertInstanceOf(FactoryInterface::class, $container->getFactory());
         $this->assertInstanceOf(EventsInterface::class, $container->getEvents());
 

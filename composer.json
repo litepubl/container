@@ -27,9 +27,18 @@
         "php": ">=7.1.0",
         "psr/container": "^1.0"
     },
+    "require-dev": {
+        "codeception/codeception" : "^2.3.6"
+    },
     "autoload": {
         "psr-4": {
             "LitePubl\\Container\\": "src/"
         }
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "tests\\container\\": "tests/support/",
+            "tests\\container\\unit\\": "tests/unit/"
+        }
+    },
 }

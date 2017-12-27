@@ -1,5 +1,5 @@
 <?php
-
+namespace tests\container;
 
 /**
  * Inherited Methods

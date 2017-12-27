@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Tests\Container;
+namespace tests\container\unit;
 
 class Mok
 {

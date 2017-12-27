@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Container;
+namespace LitePubl\Container\Exceptions;
 
 class InstallerNotFound extends \RuntimeException
 {
