@@ -41,7 +41,7 @@ class Container implements ContainerInterface, IteratorAggregate
         return $this->factory;
     }
 
-    public function setFactory(FactoryInterface $factory)
+    public function setFactory(FactoryInterface $factory): void
     {
         $this->factory = $factory;
     }
@@ -51,7 +51,7 @@ class Container implements ContainerInterface, IteratorAggregate
         return $this->events;
     }
 
-    public function setEvents(EventsInterface $events)
+    public function setEvents(EventsInterface $events): void
     {
         $this->events = $events;
     }
@@ -91,7 +91,7 @@ class Container implements ContainerInterface, IteratorAggregate
         return array_key_exists(ltrim($className, '\\'), $this->items);
     }
 
-    public function set($instance, string $name = '')
+    public function set(object $instance, ? string $name): void
     {
         $this->items[get_class($instance)] = $instance;
         if ($name) {
@@ -102,7 +102,7 @@ class Container implements ContainerInterface, IteratorAggregate
         $this->events->onSet($instance, $name);
     }
 
-    public function createInstance(string $className)
+    public function createInstance(string $className): object
     {
         $result = $this->events->onBeforeCreate($className);
         if (!$result) {
@@ -138,7 +138,7 @@ class Container implements ContainerInterface, IteratorAggregate
         return false;
     }
 
-    public function remove($instance): bool
+    public function remove(object $instance): bool
     {
         $result = false;
         foreach ($this->items as $name => $item) {

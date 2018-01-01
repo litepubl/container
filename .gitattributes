@@ -64,3 +64,4 @@
 # git files
 .gitattributes export-ignore
 .gitignore export-ignore
+docker/attach.bat export-ignore

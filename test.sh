@@ -1,0 +1,1 @@
+vendor/bin/codecept run unit --steps --html --debug>bout.txt

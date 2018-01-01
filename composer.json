@@ -40,5 +40,5 @@
             "tests\\container\\": "tests/support/",
             "tests\\container\\unit\\": "tests/unit/"
         }
-    },
+    }
 }
