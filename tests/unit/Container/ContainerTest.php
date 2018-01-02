@@ -100,9 +100,13 @@ class ContainerTest extends \Codeception\Test\Unit
         $this->tester->expectException(NotFound::class, function () use ($container) {
                 $container->get(Unknown::class);
         });
+    }
 
+    public function testFactorryMethods()
+    {
+        $container = $this->createContainer();
                 $factory = $this->prophesize(FactoryInterface::class);
-        $factory->getImplementation(Argument::type('string'))->willReturn('');
+        $factory->getImplementation(Argument::type('string'))->willReturn(null);
         $factory->has(Argument::type('string'))->willReturn(false);
         $container->setFactory($factory->reveal());
 
@@ -117,7 +121,14 @@ class ContainerTest extends \Codeception\Test\Unit
                 $this->assertInstanceOf(Mok::class, $container->createInstance(Mok::class));
                 $this->assertInstanceOf(Mok::class, $container->get(Mok::class));
                 $this->assertTrue($container->has(Mok::class));
+    }
 
+    public function testCircleException()
+    {
+        $container = $this->createContainer();
+                $factory = $this->prophesize(FactoryInterface::class);
+        $factory->getImplementation(Argument::type('string'))->willReturn(null);
+        $factory->has(Mok::class)->willReturn(true);
         $factory->get(Mok::class)->will(function () use ($container) {
             return $container->get(Mok::class);
         });

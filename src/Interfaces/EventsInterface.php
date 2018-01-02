@@ -4,7 +4,7 @@ namespace LitePubl\Container\Interfaces;
 
 interface EventsInterface
 {
-    public function setContainer(ContainerInterface $container);
+    public function setContainer(ContainerInterface $container): void;
     public function onBeforeGet(string $className): ? object;
     public function onAfterGet(string $className, object $instance): void;
     public function onSet(object $instance, ? string $name): void;
