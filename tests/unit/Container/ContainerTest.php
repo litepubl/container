@@ -12,6 +12,7 @@ use LitePubl\Container\Exceptions\NotFound;
 use Psr\Container\NotFoundExceptionInterface ;
 use Prophecy\Argument;
 use tests\container\unit\Mok;
+use tests\container\unit\MokScalar;
 use \IteratorAggregate;
 use \ArrayIterator;
 
@@ -57,7 +58,7 @@ class ContainerTest extends \Codeception\Test\Unit
         $this->assertTrue($events->reveal() === $container->getEvents());
     }
 
-    public function testMok()
+    public function testSet()
     {
         $container = $this->createContainer();
         $this->assertFalse($container->has(Mok::class));
@@ -65,6 +66,18 @@ class ContainerTest extends \Codeception\Test\Unit
         $container->set($mok);
         $this->assertTrue($container->has(Mok::class));
         $this->assertTrue($mok === $container->get(Mok::class));
+    }
+
+    public function testSetWithName()
+    {
+        $container = $this->createContainer();
+        $this->assertFalse($container->has(Mok::class));
+        $mok = new Mok();
+        $name = md5(microtime(true));
+        $container->set($mok, $name);
+        $this->assertTrue($container->has(Mok::class));
+        $this->assertTrue($container->has($name));
+        $this->assertTrue($mok === $container->get($name));
     }
 
     public function testDelete()
@@ -89,7 +102,7 @@ class ContainerTest extends \Codeception\Test\Unit
         $this->assertFalse($container->remove($mok));
     }
 
-    public function testNotFound()
+    public function testUnknownNotFound()
     {
         $container = $this->createContainer();
 
@@ -102,25 +115,96 @@ class ContainerTest extends \Codeception\Test\Unit
         });
     }
 
-    public function testFactorryMethods()
+    public function testNotFound()
     {
-        $container = $this->createContainer();
                 $factory = $this->prophesize(FactoryInterface::class);
-        $factory->getImplementation(Argument::type('string'))->willReturn(null);
-        $factory->has(Argument::type('string'))->willReturn(false);
-        $container->setFactory($factory->reveal());
+        $factory->getImplementation(Argument::type('string'))->willReturn(null)->shouldBeCalled();
+        $factory->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
 
-        $this->tester->expectException(NotFoundExceptionInterface ::class, function () use ($container) {
+                $events = $this->prophesize(EventsInterface::class);
+        $events->onBeforeGet(Mok::class)->willReturn(null)->shouldBeCalled();
+        $events->onBeforeCreate(Mok::class)->willReturn(null)->shouldBeCalled();
+        $events->onNotFound(Mok::class)->willReturn(null)->shouldBeCalled();
+
+        $container = new Container($factory->reveal(), $events->reveal());
+
+        $this->expectException(NotFoundExceptionInterface ::class);
                 $container->get(Mok::class);
-        });
+    }
 
-        $factory->has(Mok::class)->willReturn(true);
-        $factory->get(Mok::class)->willReturn(new Mok());
-        $container->setFactory($factory->reveal());
+    public function testGet()
+    {
+                $factory = $this->prophesize(FactoryInterface::class);
+        $factory->getImplementation(Argument::type('string'))->willReturn(null)->shouldBeCalled();
+        $factory->has(Mok::class)->willReturn(true)->shouldBeCalled();
+        $factory->get(Mok::class)->willReturn(new Mok())->shouldBeCalled();
 
-                $this->assertInstanceOf(Mok::class, $container->createInstance(Mok::class));
+                $events = $this->prophesize(EventsInterface::class);
+        $events->onBeforeGet(Mok::class)->willReturn(null)->shouldBeCalled();
+        $events->onAfterGet(Mok::class, Argument::type(Mok::class))->shouldBeCalled();
+        $events->onBeforeCreate(Mok::class)->willReturn(null)->shouldBeCalled();
+        $events->onAfterCreate(Mok::class, Argument::type(Mok::class))->shouldBeCalled();
+
+        $container = new Container($factory->reveal(), $events->reveal());
+
+                $this->assertFalse($container->has(Mok::class));
                 $this->assertInstanceOf(Mok::class, $container->get(Mok::class));
                 $this->assertTrue($container->has(Mok::class));
+    }
+
+    public function testCreateInstance()
+    {
+                $factory = $this->prophesize(FactoryInterface::class);
+        $factory->getImplementation(Argument::type('string'))->willReturn(null)->shouldBeCalled();
+        $factory->has(Mok::class)->willReturn(true)->shouldBeCalled();
+        $factory->get(Mok::class)->willReturn(new Mok())->shouldBeCalled();
+
+                $events = $this->prophesize(EventsInterface::class);
+        $events->onBeforeCreate(Mok::class)->willReturn(null)->shouldBeCalled();
+        $events->onAfterCreate(Mok::class, Argument::type(Mok::class))->shouldBeCalled();
+
+        $container = new Container($factory->reveal(), $events->reveal());
+
+                $this->assertFalse($container->has(Mok::class));
+                $this->assertInstanceOf(Mok::class, $container->createInstance(Mok::class));
+                $this->assertFalse($container->has(Mok::class));
+    }
+
+    public function testOnBeforeCreate()
+    {
+                $factory = $this->prophesize(FactoryInterface::class);
+
+                $events = $this->prophesize(EventsInterface::class);
+        $events->onBeforeCreate(Mok::class)->willReturn(new Mok())->shouldBeCalled();
+        $events->onAfterCreate(Mok::class, Argument::type(Mok::class))->shouldBeCalled();
+
+        $container = new Container($factory->reveal(), $events->reveal());
+
+                $this->assertFalse($container->has(Mok::class));
+                $this->assertInstanceOf(Mok::class, $container->createInstance(Mok::class));
+                $this->assertFalse($container->has(Mok::class));
+    }
+
+    public function testImplements()
+    {
+                $factory = $this->prophesize(FactoryInterface::class);
+        $factory->getImplementation(Mok::class)->willReturn(MokScalar::class)->shouldBeCalled();
+        $factory->getImplementation(MokScalar::class)->willReturn(null)->shouldBeCalled();
+        $factory->has(MokScalar::class)->willReturn(true)->shouldBeCalled();
+        $factory->get(MokScalar::class)->willReturn(new MokScalar(2, 'hi'))->shouldBeCalled();
+
+                $events = $this->prophesize(EventsInterface::class);
+        $events->onBeforeGet(MokScalar::class)->willReturn(null)->shouldBeCalled();
+        $events->onAfterGet(MokScalar::class, Argument::type(MokScalar::class))->shouldBeCalled();
+        $events->onBeforeCreate(Argument::type('string'))->willReturn(null)->shouldBeCalled();
+        $events->onAfterCreate(Argument::type('string'), Argument::type('object'))->shouldBeCalled();
+
+        $container = new Container($factory->reveal(), $events->reveal());
+
+                $this->assertFalse($container->has(Mok::class));
+                $this->assertInstanceOf(MokScalar::class, $container->createInstance(Mok::class));
+                $this->assertFalse($container->has(Mok::class));
+                $this->assertTrue($container->has(MokScalar::class));
     }
 
     public function testCircleException()
@@ -138,5 +222,13 @@ class ContainerTest extends \Codeception\Test\Unit
         $this->tester->expectException(CircleException::class, function () use ($container) {
                 $container->get(Mok::class);
         });
+    }
+
+    public function testIterator()
+    {
+        $container = $this->createContainer();
+        foreach ($container as $name => $instance) {
+            $this->assertNotEmpty($instance);
+        }
     }
 }
