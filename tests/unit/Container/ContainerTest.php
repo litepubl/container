@@ -22,42 +22,76 @@ class ContainerTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    public function testMe()
+    protected function createContainer()
     {
                 $factory = $this->prophesize(FactoryInterface::class);
                 $events = $this->prophesize(EventsInterface::class);
-        $container = new Container($factory->reveal(), $events->reveal());
+        return new Container($factory->reveal(), $events->reveal());
+    }
+
+    public function testConstruct()
+    {
+        $container = $this->createContainer();
         $this->assertInstanceOf(Container::class, $container);
         $this->assertInstanceOf(ContainerInterface::class, $container);
         $this->assertInstanceOf(IteratorAggregate::class, $container);
         $this->assertInstanceOf(FactoryInterface::class, $container->getFactory());
         $this->assertInstanceOf(EventsInterface::class, $container->getEvents());
+    }
 
-        $this->assertTrue($factory->reveal() === $container->getFactory());
+    public function testFactory()
+    {
+        $container = $this->createContainer();
                 $factory = $this->prophesize(FactoryInterface::class);
         $this->assertFalse($factory->reveal() === $container->getFactory());
         $container->setFactory($factory->reveal());
         $this->assertTrue($factory->reveal() === $container->getFactory());
+    }
 
-        $this->assertTrue($events->reveal() === $container->getEvents());
+    public function testEvents()
+    {
+        $container = $this->createContainer();
                 $events = $this->prophesize(EventsInterface::class);
         $this->assertFalse($events->reveal() === $container->getEvents());
         $container->setEvents($events->reveal());
         $this->assertTrue($events->reveal() === $container->getEvents());
+    }
 
+    public function testMok()
+    {
+        $container = $this->createContainer();
         $this->assertFalse($container->has(Mok::class));
         $mok = new Mok();
         $container->set($mok);
         $this->assertTrue($container->has(Mok::class));
         $this->assertTrue($mok === $container->get(Mok::class));
+    }
+
+    public function testDelete()
+    {
+        $container = $this->createContainer();
+        $mok = new Mok();
+        $container->set($mok);
+
         $this->assertTrue($container->delete(Mok::class));
         $this->assertFalse($container->has(Mok::class));
         $this->assertFalse($container->delete(Mok::class));
+    }
+
+    public function testRemove()
+    {
+        $container = $this->createContainer();
+        $mok = new Mok();
         $container->set($mok);
         $this->assertTrue($container->has(Mok::class));
         $this->assertTrue($container->remove($mok));
         $this->assertFalse($container->has(Mok::class));
         $this->assertFalse($container->remove($mok));
+    }
+
+    public function testNotFound()
+    {
+        $container = $this->createContainer();
 
         $this->tester->expectException(NotFoundExceptionInterface ::class, function () use ($container) {
                 $container->get(Unknown::class);

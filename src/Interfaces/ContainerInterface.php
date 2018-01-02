@@ -10,7 +10,7 @@ interface ContainerInterface extends PsrContainerInterface
     public function setFactory(FactoryInterface $factory): void;
     public function getEvents(): EventsInterface;
     public function setEvents(EventsInterface $events): void;
-    public function set(object $instance, ?string $name): void;
+    public function set(object $instance, ?string $name = null): void;
     public function createInstance(string $className): object;
     public function delete(string $className): bool;
     public function remove(object $instance): bool;

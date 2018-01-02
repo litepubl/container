@@ -91,7 +91,7 @@ class Container implements ContainerInterface, IteratorAggregate
         return array_key_exists(ltrim($className, '\\'), $this->items);
     }
 
-    public function set(object $instance, ? string $name): void
+    public function set(object $instance, ? string $name = null): void
     {
         $this->items[get_class($instance)] = $instance;
         if ($name) {
