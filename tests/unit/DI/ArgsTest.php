@@ -6,11 +6,14 @@ use LitePubl\Container\DI\Args;
 use LitePubl\Container\Exceptions\NotFound;
 use LitePubl\Container\Interfaces\ArgsInterface;
 use LitePubl\Container\Interfaces\CacheReflectionInterface;
+use LitePubl\Container\Exceptions\UndefinedArgValue;
+use LitePubl\Container\Exceptions\Uninstantiable;
 use Prophecy\Argument;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface ;
 use tests\container\unit\Mok;
 use tests\container\unit\MokConstructor;
+use tests\container\unit\MokDisabled;
 use tests\container\unit\MokScalar;
 
 class ArgsTest extends \Codeception\Test\Unit
@@ -57,6 +60,36 @@ class ArgsTest extends \Codeception\Test\Unit
         $this->assertEquals([5, 'some', true], $data);
     }
 
+    public function testUndefinedArgValue()
+    {
+                $config = $this->prophesize(ContainerInterface::class);
+        $config->has(MokScalar::class)->willReturn(true)->shouldBeCalled();
+        $config->get(MokScalar::class)->willReturn(['s' => 'some'])->shouldBeCalled();
+
+                $cache = $this->prophesize(CacheReflectionInterface::class);
+        $cache->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
+        $cache->set(Argument::type('string'), Argument::type('array'))->shouldBeCalled();
+
+        $args = new Args($config->reveal(), $cache->reveal());
+                $container = $this->prophesize(ContainerInterface::class);
+
+
+        $this->expectException(UndefinedArgValue::class);
+        $args->get(MokScalar::class, $container->reveal());
+    }
+
+    public function testUninstantiable()
+    {
+                $config = $this->prophesize(ContainerInterface::class);
+                $cache = $this->prophesize(CacheReflectionInterface::class);
+        $cache->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
+
+        $args = new Args($config->reveal(), $cache->reveal());
+                $container = $this->prophesize(ContainerInterface::class);
+
+        $this->expectException(Uninstantiable::class);
+        $args->get(MokDisabled::class, $container->reveal());
+    }
     public function testGetReflectedParams()
     {
                 $config = $this->prophesize(ContainerInterface::class);

@@ -2,7 +2,7 @@
 
 namespace LitePubl\Container\Exceptions;
 
-use LitePubl\Container\interface\ArgsExceptionInterface;
+use LitePubl\Container\interfaces\ArgsExceptionInterface;
 
 class Uninstantiable extends \UnexpectedValueException implements ArgsExceptionInterface
 {
