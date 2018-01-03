@@ -33,19 +33,39 @@ class ArgsTest extends \Codeception\Test\Unit
     public function testGet()
     {
                 $config = $this->prophesize(ContainerInterface::class);
-        $config->has(Argument::type('string'))->willReturn(false);
 
                 $cache = $this->prophesize(CacheReflectionInterface::class);
         $cache->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
         $cache->set(Argument::type('string'), Argument::type('array'))->shouldBeCalled();
 
         $args = new Args($config->reveal(), $cache->reveal());
-                $container = $this->prophesize(ContainerInterface::class)->reveal();
+                $container = $this->prophesize(ContainerInterface::class);
+
+                $data = $args->get(Mok::class, $container->reveal());
+        $this->assertEquals([], $data);
+
+        $config->has(Argument::type('string'))->willReturn(true)->shouldBeCalled();
+        $config->get(MokConstructor::class)->willReturn([])->shouldBeCalled();
+        $container->get(Mok::class)->willReturn(new Mok())->shouldBeCalled();
+
+                $data = $args->get(MokConstructor::class, $container->reveal());
+        $this->assertEquals([new Mok()], $data);
+
+        $config->get(MokScalar::class)->willReturn(['s' => 'some', 'i' => 5])->shouldBeCalled();
+
+                $data = $args->get(MokScalar::class, $container->reveal());
+        $this->assertEquals([5, 'some', true], $data);
+    }
+
+    public function testGetReflectedParams()
+    {
+                $config = $this->prophesize(ContainerInterface::class);
+                $cache = $this->prophesize(CacheReflectionInterface::class);
+        $args = new Args($config->reveal(), $cache->reveal());
 
         foreach ([Mok::class, MokConstructor::class, MokScalar::class] as $className) {
-                $data = $args->get($className, $container);
-            codecept_debug(var_export($data, true));
-                $this->assertSame($className::ARGS, $data);
+                $data = $args->getReflectedParams($className);
+                 $this->assertSame($className::ARGS, $data);
         }
     }
 }

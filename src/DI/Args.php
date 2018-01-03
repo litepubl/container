@@ -1,9 +1,11 @@
 <?php
 namespace LitePubl\Container\DI;
 
+use LitePubl\Container\Exceptions\NotFound;
+use LitePubl\Container\Exceptions\UndefinedArgValue;
+use LitePubl\Container\Exceptions\Uninstantiable;
 use LitePubl\Container\Interfaces\ArgsInterface;
 use LitePubl\Container\Interfaces\CacheReflectionInterface;
-use LitePubl\Container\Exceptions\NotFound;
 use Psr\Container\ContainerInterface;
 
 class Args implements ArgsInterface
@@ -12,15 +14,17 @@ class Args implements ArgsInterface
     const TYPE = 'type';
     const VALUE = 'value';
     const CLASS_NAME = 'classname';
-    const UNDEFINED = 'undefined';
+    const REQUIRED = 'required';
 
     protected $config;
     protected $cache;
+    protected $classes;
 
     public function __construct(ContainerInterface $config, CacheReflectionInterface $cache)
     {
         $this->config = $config;
         $this->cache = $cache;
+        $this->classes = [];
     }
 
     public function get(string $className, ContainerInterface $container): array
@@ -33,7 +37,12 @@ class Args implements ArgsInterface
                 $config = [];
             }
 
-            $result = $this->merge($container, $result, $config);
+            try {
+                $this->classes[] = $className;
+                        $result = $this->merge($container, $result, $config);
+            } finally {
+                array_pop($this->classes);
+            }
         }
 
         return $result;
@@ -44,34 +53,22 @@ class Args implements ArgsInterface
         $result = [];
         foreach ($args as $i => $arg) {
             $name = $arg[static::NAME];
-            $value = $config[$name] ?? $config[$i] ?? $arg[static::VALUE] ?? null;
-            $result[] = $this->getValue($container, $arg, $value);
-        }
 
-        return $result;
-    }
+            if (array_key_exists($name, $config)) {
+                        $value = $config[$name];
+            } elseif (array_key_exists($i, $config)) {
+                $value = $config[$i];
+            } elseif (array_key_exists(static::VALUE, $arg)) {
+                $value = $arg[static::VALUE];
+            } else {
+                throw new UndefinedArgValue($this->classes[count($this->classes) - 1], $name);
+            }
 
-    protected function getValue(ContainerInterface $container, array $arg, $value)
-    {
-        switch ($arg[static::TYPE]) {
-            case static::CLASS_NAME:
-                $result= $container->get($value);
-                break;
-                
-            case static::VALUE:
-                $result = $value;
-                break;
+            if ($arg[static::TYPE] == static::CLASS_NAME) {
+                $value = $container->get($value);
+            }
 
-            case static::UNDEFINED:
-                if ($value) {
-                    $result = $value;
-                } else {
-                    throw new UndefinedArgValueException($name);
-                }
-                break;
-                
-            default:
-                throw new UnknownArgTypeException($arg[static::NAME], $arg[static::TYPE]);
+            $result[] = $value;
         }
 
         return $result;
@@ -84,16 +81,15 @@ class Args implements ArgsInterface
         }
         
         $result = $this->getReflectedParams($className);
-        codecept_debug(var_export($result, true));
         $this->cache->set($className, $result);
         return $result;
     }
 
-    protected function getReflectedParams(string $className): array
+    public function getReflectedParams(string $className): array
     {
         $reflectedClass = new \ReflectionClass($className);
         if (!$reflectedClass->isInstantiable()) {
-            throw new UninstantiableException($className);
+            throw new Uninstantiable($className);
         }
         
         $result = [];
@@ -115,9 +111,15 @@ class Args implements ArgsInterface
                         static::NAME => $name,
                         static::VALUE => $parameter->getDefaultValue()
                     ];
+                } elseif ($parameter->allowsNull()) {
+                    $result[] = [
+                        static::TYPE => static::VALUE,
+                        static::NAME => $name,
+                        static::VALUE => null,
+                    ];
                 } else {
                     $result[] = [
-                        static::TYPE => static::UNDEFINED,
+                        static::TYPE => static::REQUIRED,
                         static::NAME => $name,
                     ];
                 }

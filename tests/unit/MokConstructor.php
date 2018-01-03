@@ -7,6 +7,11 @@ class MokConstructor
     private $mok;
 
     const ARGS = [
+    [
+      'type' => 'classname',
+      'name' => 'mok',
+      'value' => Mok::class,
+    ],
     ];
 
     public function __construct(Mok $mok)
