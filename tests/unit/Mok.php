@@ -17,4 +17,9 @@ class Mok
     ['id' => 2],
     ]
     ];
+
+    const ARGS = [];
+    public function __construct()
+    {
+    }
 }

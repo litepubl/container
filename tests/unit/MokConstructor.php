@@ -1,10 +1,13 @@
 <?php
 
-namespace LitePubl\Tests\Container;
+namespace tests\container\unit;
 
 class MokConstructor
 {
     private $mok;
+
+    const ARGS = [
+    ];
 
     public function __construct(Mok $mok)
     {

@@ -84,6 +84,7 @@ class Args implements ArgsInterface
         }
         
         $result = $this->getReflectedParams($className);
+        codecept_debug(var_export($result, true));
         $this->cache->set($className, $result);
         return $result;
     }
