@@ -1,6 +1,6 @@
 <?php
 
-namespace LitePubl\Container\Factories;
+namespace LitePubl\Container\Installer;
 
 use LitePubl\Container\Interfaces\FactoryInterface;
 

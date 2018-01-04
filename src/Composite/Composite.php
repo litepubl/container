@@ -1,9 +1,8 @@
 <?php
 
-namespace LitePubl\Container\patterns;
+namespace LitePubl\Container\Composite;
 
 use Psr\Container\ContainerInterface;
-use LitePubl\Core\Container\IterableContainerInterface;
 use LitePubl\Container\Exceptions\NotFound;
 use \IteratorAggregate;
 use \ArrayIterator;

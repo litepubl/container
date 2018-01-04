@@ -24,7 +24,7 @@ class DI implements DIInterface, ContainerInterface
         return class_exists($className);
     }
 
-    public function createInstance(string $className, ContainerInterface $container)
+    public function createInstance(string $className, ContainerInterface $container): object
     {
         $args = $this->args->get($className, $container);
         if (count($args)) {

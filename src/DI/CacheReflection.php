@@ -29,7 +29,7 @@ class CacheReflection implements CacheReflectionInterface
         return array_key_exists(ltrim($className, '\\'), $this->items);
     }
 
-    public function set(string $className, array $args)
+    public function set(string $className, array $args): void
     {
         $this->items[$className] = $args;
     }

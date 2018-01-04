@@ -2,6 +2,7 @@
 
 namespace LitePubl\Container\Container;
 
+use LitePubl\Container\Interfaces\ContainerInterface;
 use LitePubl\Container\Interfaces\EventsInterface;
 
 class NullEvents implements EventsInterface
