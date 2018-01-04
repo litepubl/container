@@ -45,19 +45,19 @@ class ArgsTest extends \Codeception\Test\Unit
                 $container = $this->prophesize(ContainerInterface::class);
 
                 $data = $args->get(Mok::class, $container->reveal());
-        $this->assertEquals([], $data);
+        $this->assertEquals(Mok::ARGS, $data);
 
         $config->has(Argument::type('string'))->willReturn(true)->shouldBeCalled();
-        $config->get(MokConstructor::class)->willReturn([])->shouldBeCalled();
+        $config->get(MokConstructor::class)->willReturn(MokConstructor::ARGS)->shouldBeCalled();
         $container->get(Mok::class)->willReturn(new Mok())->shouldBeCalled();
 
                 $data = $args->get(MokConstructor::class, $container->reveal());
         $this->assertEquals([new Mok()], $data);
 
-        $config->get(MokScalar::class)->willReturn(['s' => 'some', 'i' => 5])->shouldBeCalled();
+        $config->get(MokScalar::class)->willReturn(MokScalar::CONFIG)->shouldBeCalled();
 
                 $data = $args->get(MokScalar::class, $container->reveal());
-        $this->assertEquals([5, 'some', true], $data);
+        $this->assertEquals(MokScalar::ARGS, $data);
     }
 
     public function testUndefinedArgValue()
@@ -72,7 +72,6 @@ class ArgsTest extends \Codeception\Test\Unit
 
         $args = new Args($config->reveal(), $cache->reveal());
                 $container = $this->prophesize(ContainerInterface::class);
-
 
         $this->expectException(UndefinedArgValue::class);
         $args->get(MokScalar::class, $container->reveal());
@@ -98,7 +97,7 @@ class ArgsTest extends \Codeception\Test\Unit
 
         foreach ([Mok::class, MokConstructor::class, MokScalar::class] as $className) {
                 $data = $args->getReflectedParams($className);
-                 $this->assertSame($className::ARGS, $data);
+                 $this->assertSame($className::REFLECTED, $data);
         }
     }
 }

@@ -19,6 +19,8 @@ class Mok
     ];
 
     const ARGS = [];
+    const REFLECTED = [];
+
     public function __construct()
     {
     }

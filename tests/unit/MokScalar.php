@@ -4,7 +4,9 @@ namespace tests\container\unit;
 
 class MokScalar
 {
-    const ARGS = [
+    const ARGS = [5, 'some', true];
+    const CONFIG = ['s' => 'some', 'i' => 5];
+    const REFLECTED = [
     [
       'type' => 'required',
       'name' => 'i',

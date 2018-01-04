@@ -6,7 +6,8 @@ class MokConstructor
 {
     private $mok;
 
-    const ARGS = [
+    const ARGS = [];
+    const REFLECTED = [
     [
       'type' => 'classname',
       'name' => 'mok',
