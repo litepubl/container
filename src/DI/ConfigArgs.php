@@ -2,10 +2,10 @@
 
 namespace LitePubl\Container\DI;
 
-use LitePubl\Container\Interfaces\ArgsInterface;
 use LitePubl\Container\Exceptions\NotFound;
+use Psr\Container\ContainerInterface;
 
-class ConfigArgs implements ArgsInterface
+class ConfigArgs implements ContainerInterface
 {
     protected $items;
 

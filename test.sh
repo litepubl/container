@@ -1,1 +1,1 @@
-vendor/bin/codecept run unit  Composite/CompositeTest.php --steps --html --debug>bout.txt
+vendor/bin/codecept run unit  DI/ConfigArgsTest.php --steps --html --debug>bout.txt
