@@ -2,10 +2,10 @@
 
 namespace LitePubl\Container\Composite;
 
-use Psr\Container\ContainerInterface;
 use LitePubl\Container\Exceptions\NotFound;
-use \IteratorAggregate;
+use Psr\Container\ContainerInterface;
 use \ArrayIterator;
+use \IteratorAggregate;
 
 class Composite implements ContainerInterface, IteratorAggregate
 {
