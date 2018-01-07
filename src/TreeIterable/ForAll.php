@@ -3,7 +3,7 @@
 namespace LitePubl\Container\TreeIterable;
 
 use \IteratorAggregate;
-use \iterable;
+use \Traversable;
 
 class ForAll implements IteratorAggregate
 {
@@ -20,7 +20,7 @@ class ForAll implements IteratorAggregate
             foreach ($this->container as $name => $instance) {
                     yield $name => $instance;
 
-                if ($instance instanceof iterable) {
+                if (($instance instanceof Traversable) || is_array($instance)) {
                     yield from (new self($instance));
                 }
             }

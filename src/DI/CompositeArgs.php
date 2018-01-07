@@ -5,7 +5,7 @@ namespace LitePubl\Container\DI;
 use LitePubl\Container\Composite\Composite;
 use LitePubl\Container\Exceptions\NotFound;
 
-class CompositeArgs extends Composite implements ArgsInterface
+class CompositeArgs extends Composite
 {
     public function set(string $className, array $args)
     {
