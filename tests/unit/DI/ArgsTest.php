@@ -4,10 +4,10 @@ namespace tests\container\unit\DI;
 
 use LitePubl\Container\DI\Args;
 use LitePubl\Container\Exceptions\NotFound;
-use LitePubl\Container\Interfaces\ArgsInterface;
-use LitePubl\Container\Interfaces\CacheReflectionInterface;
 use LitePubl\Container\Exceptions\UndefinedArgValue;
 use LitePubl\Container\Exceptions\Uninstantiable;
+use LitePubl\Container\Interfaces\ArgsInterface;
+use LitePubl\Container\Interfaces\ArrayContainerInterface;
 use Prophecy\Argument;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface ;
@@ -26,7 +26,7 @@ class ArgsTest extends \Codeception\Test\Unit
     public function testConstruct()
     {
                 $config = $this->prophesize(ContainerInterface::class);
-                $cache = $this->prophesize(CacheReflectionInterface::class);
+                $cache = $this->prophesize(ArrayContainerInterface::class);
         $args = new Args($config->reveal(), $cache->reveal());
 
         $this->assertInstanceOf(Args::class, $args);
@@ -37,7 +37,7 @@ class ArgsTest extends \Codeception\Test\Unit
     {
                 $config = $this->prophesize(ContainerInterface::class);
 
-                $cache = $this->prophesize(CacheReflectionInterface::class);
+                $cache = $this->prophesize(ArrayContainerInterface::class);
         $cache->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
         $cache->set(Argument::type('string'), Argument::type('array'))->shouldBeCalled();
 
@@ -66,7 +66,7 @@ class ArgsTest extends \Codeception\Test\Unit
         $config->has(MokScalar::class)->willReturn(true)->shouldBeCalled();
         $config->get(MokScalar::class)->willReturn(['s' => 'some'])->shouldBeCalled();
 
-                $cache = $this->prophesize(CacheReflectionInterface::class);
+                $cache = $this->prophesize(ArrayContainerInterface::class);
         $cache->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
         $cache->set(Argument::type('string'), Argument::type('array'))->shouldBeCalled();
 
@@ -80,7 +80,7 @@ class ArgsTest extends \Codeception\Test\Unit
     public function testUninstantiable()
     {
                 $config = $this->prophesize(ContainerInterface::class);
-                $cache = $this->prophesize(CacheReflectionInterface::class);
+                $cache = $this->prophesize(ArrayContainerInterface::class);
         $cache->has(Argument::type('string'))->willReturn(false)->shouldBeCalled();
 
         $args = new Args($config->reveal(), $cache->reveal());
@@ -92,7 +92,7 @@ class ArgsTest extends \Codeception\Test\Unit
     public function testGetReflectedParams()
     {
                 $config = $this->prophesize(ContainerInterface::class);
-                $cache = $this->prophesize(CacheReflectionInterface::class);
+                $cache = $this->prophesize(ArrayContainerInterface::class);
         $args = new Args($config->reveal(), $cache->reveal());
 
         foreach ([Mok::class, MokConstructor::class, MokScalar::class] as $className) {

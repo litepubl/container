@@ -2,9 +2,9 @@
 
 namespace LitePubl\Container\Exceptions;
 
-use LitePubl\Container\interfaces\ArgsExceptionInterface;
+use LitePubl\Container\interfaces\DIExceptionInterface;
 
-class UndefinedArgValue extends \UnexpectedValueException implements ArgsExceptionInterface
+class UndefinedArgValue extends \UnexpectedValueException implements DIExceptionInterface
 {
     const FORMAT = 'Undefined argument "%2$s" in constructor "%1$s"';
     protected $className;

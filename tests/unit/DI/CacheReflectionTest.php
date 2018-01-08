@@ -4,7 +4,7 @@ namespace tests\container\unit\DI;
 
 use LitePubl\Container\DI\CacheReflection;
 use LitePubl\Container\Exceptions\NotFound;
-use LitePubl\Container\Interfaces\CacheReflectionInterface;
+use LitePubl\Container\Interfaces\ArrayContainerInterface;
 use Prophecy\Argument;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface ;
@@ -23,7 +23,7 @@ class CacheReflectionTest extends \Codeception\Test\Unit
     {
                 $cache = new CacheReflection();
         $this->assertInstanceOf(CacheReflection::class, $cache);
-        $this->assertInstanceOf(CacheReflectionInterface::class, $cache);
+        $this->assertInstanceOf(ArrayContainerInterface::class, $cache);
     }
 
     public function testNotFound()

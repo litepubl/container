@@ -4,6 +4,7 @@ namespace tests\container\unit\DI;
 
 use LitePubl\Container\DI\CompositeArgs;
 use LitePubl\Container\Exceptions\NotFound;
+use LitePubl\Container\Interfaces\ArrayContainerInterface;
 use Prophecy\Argument;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface ;
@@ -19,9 +20,11 @@ class CompositeArgsTest extends \Codeception\Test\Unit
 
     public function testConstruct()
     {
-        $container = $this->prophesize(ContainerInterface::class);
+        $container = $this->prophesize(ArrayContainerInterface::class);
         $container->has(Mok::class)->willReturn(true)->shouldBeCalled();
-        $container->get(Mok::class)->willReturn([])->shouldBeCalled();
+        $container->set(Mok::class, [])->shouldBeCalled();
+        $container->has('unknown')->willReturn(false)->shouldBeCalled();
+
                 $config = new CompositeArgs($container->reveal());
         $this->assertInstanceOf(CompositeArgs::class, $config);
         $config->set(Mok::class, []);

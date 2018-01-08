@@ -2,9 +2,9 @@
 
 namespace LitePubl\Container\Exceptions;
 
-use LitePubl\Container\interfaces\ArgsExceptionInterface;
+use LitePubl\Container\interfaces\DIExceptionInterface;
 
-class Uninstantiable extends \UnexpectedValueException implements ArgsExceptionInterface
+class Uninstantiable extends \UnexpectedValueException implements DIExceptionInterface
 {
     const FORMAT = 'Class"%s" is not instantiable';
     protected $className;

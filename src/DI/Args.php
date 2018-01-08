@@ -5,7 +5,7 @@ use LitePubl\Container\Exceptions\NotFound;
 use LitePubl\Container\Exceptions\UndefinedArgValue;
 use LitePubl\Container\Exceptions\Uninstantiable;
 use LitePubl\Container\Interfaces\ArgsInterface;
-use LitePubl\Container\Interfaces\CacheReflectionInterface;
+use LitePubl\Container\Interfaces\ArrayContainerInterface;
 use Psr\Container\ContainerInterface;
 
 class Args implements ArgsInterface
@@ -20,7 +20,7 @@ class Args implements ArgsInterface
     protected $cache;
     protected $classes;
 
-    public function __construct(ContainerInterface $config, CacheReflectionInterface $cache)
+    public function __construct(ContainerInterface $config, ArrayContainerInterface $cache)
     {
         $this->config = $config;
         $this->cache = $cache;

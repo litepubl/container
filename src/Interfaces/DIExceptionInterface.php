@@ -2,6 +2,6 @@
 
 namespace LitePubl\Container\Interfaces;
 
-interface ArgsExceptionInterface
+interface DIExceptionInterface
 {
 }

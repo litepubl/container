@@ -1,1 +1,1 @@
-vendor/bin/codecept run unit  TreeIterable/ForClassTest.php --steps --html --debug>bout.txt
+vendor/bin/codecept run unit    --steps --html --debug>bout.txt

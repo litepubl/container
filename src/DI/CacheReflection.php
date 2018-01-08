@@ -2,10 +2,10 @@
 
 namespace LitePubl\Container\DI;
 
-use LitePubl\Container\Interfaces\CacheReflectionInterface;
+use LitePubl\Container\Interfaces\ArrayContainerInterface;
 use LitePubl\Container\Exceptions\NotFound;
 
-class CacheReflection implements CacheReflectionInterface
+class CacheReflection implements ArrayContainerInterface
 {
     protected $items;
 
@@ -14,7 +14,7 @@ class CacheReflection implements CacheReflectionInterface
         $this->items = [];
     }
 
-    public function get(string $className): array
+    public function get($className)
     {
         $className = ltrim($className, '\\');
         if (isset($this->items[$className])) {
@@ -24,7 +24,7 @@ class CacheReflection implements CacheReflectionInterface
         throw new NotFound($className);
     }
 
-    public function has(string $className): bool
+    public function has($className)
     {
         return array_key_exists(ltrim($className, '\\'), $this->items);
     }
