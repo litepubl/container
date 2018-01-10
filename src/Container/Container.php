@@ -106,7 +106,7 @@ class Container implements ContainerInterface, IteratorAggregate
     {
         $result = $this->events->onBeforeCreate($className);
         if (!$result) {
-            if ($newClass = $this->factory->getImplementation($className)) {
+            if ($newClass = $this->factory->getImplements($className)) {
                 $result = $this->get($newClass);
             } elseif ($this->factory->has($className)) {
                 $result = $this->factory->get($className);

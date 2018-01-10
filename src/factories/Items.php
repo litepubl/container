@@ -41,13 +41,9 @@ class Items implements FactoryInterface
         return array_key_exists(ltrim($className, '\\'), $this->items);
     }
 
-    public function getImplementation(string $className): string
+    public function getImplements(string $className): ? string
     {
-        if (isset($this->implementations[$className])) {
-                return $this->implementations[$className];
-        }
-
-        return '';
+                return $this->implementations[$className] ?? null;
     }
 
     public function getInstaller(string $className): InstallerInterface

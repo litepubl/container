@@ -17,9 +17,9 @@ abstract class Base implements FactoryInterface
         $this->container = $container;
     }
 
-    public function getImplementation(string $className): string
+    public function getImplements(string $className): ? string
     {
-        return $this->implementations[$className] ?? '';
+        return $this->implementations[$className] ?? null;
     }
 
     public function get($className)

@@ -14,7 +14,7 @@ class NameSpaceFactory implements FactoryInterface
         $this->container = $container;
     }
 
-    protected function getFactoryClass($className): string
+    protected function getFactoryClass(string $className): string
     {
         $className = ltrim($className, '\\');
             $ns = substr($className, 0, strrpos($className, '\\'));
@@ -34,14 +34,8 @@ class NameSpaceFactory implements FactoryInterface
         return ($className != $factoryClass) && class_exists($factoryClass);
     }
 
-    public function getImplementation(string $className): string
+    public function getImplements(string $className): ? string
     {
-        return '';
-    }
-
-    public function getInstaller(string $className): InstallerInterface
-    {
-        $factory = $this->get($className);
-        return $factory->getInstaller($className);
+        return null;
     }
 }

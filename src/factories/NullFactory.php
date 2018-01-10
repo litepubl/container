@@ -17,7 +17,7 @@ class NullFactory implements FactoryInterface
         return false;
     }
 
-    public function getImplementation(string $className): ? string
+    public function getImplements(string $className): ? string
     {
         return null;
     }

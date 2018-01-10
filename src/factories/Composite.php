@@ -13,20 +13,20 @@ class Composite extends PatternComposite implements FactoryInterface
         $this->items = $items;
     }
 
-    public function getImplementation(string $className): string
+    public function getImplements(string $className): ? string
     {
-        if ($this->current && isset($this->items[$this->current]) && ($result = $this->items[$this->current]->getImplementation($className))) {
+        if ($this->current && isset($this->items[$this->current]) && ($result = $this->items[$this->current]->getImplements($className))) {
                 return $result;
         }
 
         foreach ($this->items as $i => $container) {
-            if ($result = $container->getImplementation($className)) {
+            if ($result = $container->getImplements($className)) {
                 $this->current = $i;
                 return $result;
             }
         }
 
-        return '';
+        return null;
     }
 
     public function getInstaller(string $className): InstallerInterface

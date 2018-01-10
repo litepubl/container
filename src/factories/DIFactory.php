@@ -27,9 +27,9 @@ class DIFactory implements FactoryInterface
         return $this->DI->has($className);
     }
 
-    public function getImplementation(string $className): string
+    public function getImplements(string $className): ? string
     {
-        return '';
+        return null;
     }
 
     public function getInstaller(string $className): InstallerInterface
