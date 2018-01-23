@@ -2,9 +2,9 @@
 
 namespace LitePubl\Container\Factories;
 
-use Psr\Container\ContainerInterface;
-use LitePubl\Container\Interfaces\FactoryInterface;
 use LitePubl\Container\Exceptions\NotFound;
+use LitePubl\Container\Interfaces\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class Items implements FactoryInterface
 {

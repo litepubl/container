@@ -3,8 +3,11 @@ services:
 
     php-fpm:
       image: litepubl/php72
-      container_name: container-php
+      container_name: ${FPM_CONTAINER_NAME}
+      env_file: .env
       working_dir: /var/www/html
       volumes:
         - ..:/var/www/html
         - ./php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+        - "${LOGS_DIR}:/logs"
+        - "${SSH_DIR}:/home/user/.ssh"
